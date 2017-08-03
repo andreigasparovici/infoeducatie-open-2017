@@ -1,9 +1,7 @@
 var workspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
 
-var x = function() {
-	var code = Blockly.PHP.workspaceToCode(workspace);
-	console.log(code);
-	return false;
+function getPhpCode() {
+	return Blockly.PHP.workspaceToCode(workspace);
 }
 
 function getXml(workspace) {
@@ -21,4 +19,12 @@ window.onload = function(event) {
 		var xml = Blockly.Xml.textToDom(Cookies.get('blocky_xml'));
 		Blockly.Xml.domToWorkspace(xml, workspace);
 	}
+};
+
+document.getElementById("generate_schema").onclick = function() {
+	$.post('/schema', {
+		code: getPhpCode()
+	}, function(data) {
+		console.log(data);
+	});
 };
