@@ -8,7 +8,75 @@ var SDebugger = function(bs, outS) {
         this.blockMap[bs[i].id] = bs[i];
 }
 
-SDebugger.prototype.evaluate = function(arithmetic) {
+var lookup = function(arithmetic, st, dr, arr) {
+    var inpar = 0;
+    for (var i = dr; i >= st; i--) {
+        if (arithmetic[i] == ')')
+            inpar++;
+        else if (arithmetic[i] == '(')
+            inpar--;
+        else if (inpar == 0) {
+            for (var j = 0; j < arr.length; j++)
+                if (arithmetic[i] == arr[j])
+                    return i;
+        }
+    }
+    return -1;
+}
+
+SDebugger.prototype.evaluate = function(arithmetic, st, dr) {
+    var pos;
+    if (!st) st = 0;
+    if (!dr) dr = arithmetic.length-1;
+    //console.log(arithmetic + " " + st + " " + dr);
+    if (st > dr)
+        return 0;
+    while (arithmetic[st] == ' ') st++;
+    while (arithmetic[dr] == ' ') dr--;
+    if ((pos = lookup(arithmetic, st, dr, ['+', '-'])) != -1) {
+        if (arithmetic[pos] == '+')
+            return this.evaluate(arithmetic, st, pos-1) + this.evaluate(arithmetic, pos+1, dr);
+        else
+            return this.evaluate(arithmetic, st, pos-1) - this.evaluate(arithmetic, pos+1, dr);
+    }
+    if ((pos = lookup(arithmetic, st, dr, ['*', '/'])) != -1) {
+        if (arithmetic[pos] == '*')
+            return this.evaluate(arithmetic, st, pos-1) * this.evaluate(arithmetic, pos+1, dr);
+        else
+            return this.evaluate(arithmetic, st, pos-1) / this.evaluate(arithmetic, pos+1, dr);
+    }
+    for (var i = dr; i >= st; i--) {
+        var inpar = 0;
+        if (arithmetic[i] == ')')
+            inpar++;
+        else if (arithmetic[i] == '(')
+            inpar--;
+        else if (inpar == 0) {
+            if (arithmetic[i] == '<')
+                return this.evaluate(arithmetic, st, i-1) < this.evaluate(arithmetic, i+1, dr);
+            if (arithmetic[i] == '>')
+                return this.evaluate(arithmetic, st, i-1) > this.evaluate(arithmetic, i+1, dr);
+            if (arithmetic[i] == '=') {
+                if (arithmetic[i-1] == '=')
+                    return this.evaluate(arithmetic, st, i-2) == this.evaluate(arithmetic, i+1, dr);
+                if (arithmetic[i-1] == '<')
+                    return this.evaluate(arithmetic, st, i-2) <= this.evaluate(arithmetic, i+1, dr);
+                if (arithmetic[i-1] == '>')
+                    return this.evaluate(arithmetic, st, i-2) >= this.evaluate(arithmetic, i+1, dr);
+            }
+        }
+    }
+    if (arithmetic[st] == '(' && arithmetic[dr] == ')')
+        return eval(arithmetic, st+1, dr-1);
+    var rest = "";
+    for (var i = st; i <= dr; i++)
+        rest += arithmetic[i];
+    if (rest[0] >= '0' && rest[0] <= '9') {
+        return parseInt(rest);
+    }
+    if (this.varValues[rest])
+        return this.varValues[rest];
+    console.log("ERROR");
     return 10;
 }
 
@@ -25,7 +93,8 @@ SDebugger.prototype.processState = function(block) {
         for (pos = pos+1; pos < expression.length; pos++)
             arithmetic += expression[pos];
         arithmetic = arithmetic.trim();
-        console.log(varName + " w become " + arithmetic);
+        this.varValues[varName] = this.evaluate(arithmetic);
+        //console.log(varName + " received " + this.varValues[varName]);
     }
     else if (block.type == "condition") {
         return this.evaluate(block.expr.trim());
@@ -79,7 +148,7 @@ SDebugger.prototype.next = function() {
     var rez = this.processState(this.currentBlock);
     if (this.currentBlock.type == "condition") {
         if (rez == 0)
-            this.currentBlock = this.badNextBlock(this.currentBlock);
+            this.currentBlock = this.nextBadBlock(this.currentBlock);
         else
             this.currentBlock = this.nextGoodBlock(this.currentBlock);
     }

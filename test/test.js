@@ -144,13 +144,13 @@ e6=>end: Stop`);
 $y;
 $x = 12 + 15;
 if ($x == 25) {
-  $x = 0;
+  $x = $x + 13;
 } else if ($x == 27) {
   $x = 1;
 } else {
   $x = 3;
 }
-if (5 == 0) {
+if (5 == 5) {
   $y = 4;
 }`;
             var rez = converter(text);
@@ -160,7 +160,16 @@ if (5 == 0) {
             });
             debug.next();
             debug.next();
-            
+            chai.expect(debug.varValues["x"]).to.equal(27);
+            debug.next();
+            chai.expect(debug.varValues["x"]).to.equal(27);
+            debug.next();
+            chai.expect(debug.varValues["x"]).to.equal(27);
+            debug.next();
+            chai.expect(debug.varValues["x"]).to.equal(1);
+            debug.next();
+            debug.next();
+            chai.expect(debug.varValues["y"]).to.equal(4);
         });
     });
 
