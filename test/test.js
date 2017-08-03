@@ -3,6 +3,7 @@ const path = require('path');
 
 let converter = require('../Converter.js');
 let flowTranslator = require('../FlowchartTranslator.js');
+let SchemeDebug = require('../SchemeDebug.js');
 
 describe('Converter testing', () => {
 	describe('Testing graf creation', () => {
@@ -136,4 +137,31 @@ e5=>operation: y = 2*x + y
 e6=>end: Stop`);
         });
     });
+
+    describe("Testing scheme debug", () => {
+        it ("Check debug 1", () => {
+            var text = `$x;
+$y;
+$x = 12 + 15;
+if ($x == 25) {
+  $x = 0;
+} else if ($x == 27) {
+  $x = 1;
+} else {
+  $x = 3;
+}
+if (5 == 0) {
+  $y = 4;
+}`;
+            var rez = converter(text);
+            //console.log(flowTranslator(rez));   
+            var debug = new SchemeDebug(rez, (data) => {
+                console.log("xd " + data);
+            });
+            debug.next();
+            debug.next();
+            
+        });
+    });
+
 });
