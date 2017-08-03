@@ -4,6 +4,7 @@ CREATE TABLE `users` (
 	`password` varchar(200) NOT NULL,
 	`is_teacher` INT(5) NOT NULL DEFAULT '0',
 	`name` varchar(50) NOT NULL,
+	`is_activated` int(5) NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 );
 
@@ -18,7 +19,7 @@ CREATE TABLE `tests` (
 	`id` int NOT NULL,
 	`input` TEXT NOT NULL,
 	`output` TEXT NOT NULL,
-	`problem_id`  NOT NULL,
+	`problem_id` int NOT NULL,
 	PRIMARY KEY (`id`)
 );
 
