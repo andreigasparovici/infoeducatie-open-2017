@@ -44,8 +44,10 @@ var addSuccessorEdge = function(a, b, t) {
         //console.log(p + " " + JSON.stringify(zp));
         addSuccessorEdge(getBlockById(a.edges[i].y), b, t);
     }
-    if (a.edges.length == 0 || (a.edges.length == 1 && a.type == "condition"))
+    if (a.edges.length == 0) //|| (a.edges.length == 1 && a.type == "condition"))
         addEdge(a, b, t);
+    else if (a.edges.length == 1 && a.type == "condition")
+        addEdge(a, b, "NU");
 }
 
 var parseCursor;

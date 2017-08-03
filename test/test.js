@@ -3,6 +3,7 @@ const path = require('path');
 
 let converter = require('../Converter.js');
 let flowTranslator = require('../FlowchartTranslator.js');
+let SchemeDebug = require('../SchemeDebug.js');
 
 describe('Converter testing', () => {
 	describe('Testing graf creation', () => {
@@ -136,4 +137,89 @@ e5=>operation: y = 2*x + y
 e6=>end: Stop`);
         });
     });
+
+    describe("Testing scheme debug", () => {
+        it ("Check debug 1 (if)", () => {
+            var text = `$x;
+$y;
+$x = 12 + 15;
+if ($x == 25) {
+  $x = $x + 13;
+} else if ($x == 27) {
+  $x = 1;
+} else {
+  $x = 3;
+}
+if ($x == 1) {
+  $y = 4;
+  print($x + $y);
+}`;
+            var rez = converter(text);
+            //console.log(flowTranslator(rez));   
+            var debug = new SchemeDebug(rez, (data) => {
+                //console.log("xd " + data);
+                chai.expect(data).to.equal(5);
+            });
+            debug.next();
+            debug.next();
+            chai.expect(debug.varValues["x"]).to.equal(27);
+            debug.next();
+            chai.expect(debug.varValues["x"]).to.equal(27);
+            debug.next();
+            chai.expect(debug.varValues["x"]).to.equal(27);
+            debug.next();
+            chai.expect(debug.varValues["x"]).to.equal(1);
+            debug.next();
+            debug.next();
+            chai.expect(debug.varValues["y"]).to.equal(4);
+            debug.next();
+        });
+
+        it ("Check debug 2 (while)", () => {
+            var text = `$x;
+$y;
+$y = 20;
+$x = 2*y - 15 - 1;
+while ($x < 30) {
+  $x = $x + 1;
+  print($x);
+}`;
+            var rez = converter(text), arr = [];
+            //console.log(flowTranslator(rez));   
+            var debug = new SchemeDebug(rez, (data) => {
+                 //console.log("xd " + data);
+                 arr.push(data);
+                 //chai.expect(data).to.equal(5);
+            });
+            while (debug.currentBlock) {
+                debug.next();
+            }
+            chai.expect(arr).to.deep.equal([25, 26, 27, 28, 29, 30]);
+        });
+
+        it ("Check debug 3 (for)", () => {
+            var text = `$x;
+$i;
+$x = 3;
+for ($i = 15; $i <= 23; $i = $i + 2) {
+  if ($x == 3) {
+    $x = $x + 1;
+  } else {
+    $x = $x + 2;
+  }
+  print('i = ' + $i + ' => x = ' + $x);
+}`;
+            var rez = converter(text), arr = [];
+            //console.log(flowTranslator(rez));   
+            var debug = new SchemeDebug(rez, (data) => {
+                 arr.push(data);
+            });
+            while (debug.currentBlock) {
+                debug.next();
+            }
+            chai.expect(arr[0]).to.equal("i = 15 => x = 4");
+            chai.expect(arr[1]).to.equal("i = 17 => x = 6");
+        });
+    });
+
 });
