@@ -47,8 +47,8 @@ class DbApi {
 					}
 				});
 		});
-	}
-
+    }
+    
 }
 
 module.exports = DbApi;
