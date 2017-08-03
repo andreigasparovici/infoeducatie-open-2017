@@ -1,3 +1,11 @@
 #generate_schema {
 	cursor: pointer;
 }
+#diagram {
+	position: absolute;
+	z-index: 50;
+	width: 40%;
+	height: 50px;
+	left: 700px;
+	top: 0px;
+}
