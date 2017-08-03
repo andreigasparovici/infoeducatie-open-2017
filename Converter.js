@@ -171,6 +171,21 @@ var parsePhpCode = function(runOnce) {
         }
         return toR;
     }
+    else if (phpCode[parseCursor] == 'w') {
+        var expression = getToParantText();
+        expression = eliminateHolders(expression);
+        goPast('{');
+        var toR = addBlock(expression, "condition");
+        var DA = parsePhpCode();
+        addEdge(toR, DA, "DA");
+        goPast('}');
+        addSuccessorEdge(DA, toR, "EMPTY");
+        if (!runOnce) {
+            var continuation = parsePhpCode();
+            addEdge(toR, continuation, "NU");
+        }
+        return toR;
+    }
 }
 
 //var phpText = fs.readFileSync('phptestfile.php');

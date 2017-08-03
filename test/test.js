@@ -63,6 +63,23 @@ if (5 == 0) {
             for (var i = 0; i < rez.length; i++)
                 cnt += (rez[i].type == "end");
             chai.expect(cnt).to.equal(1);
+        });
+        
+        it('Check while', () => {
+            var text = `$x;
+$y;
+$x = 12 + 15;
+while ($x < 30) {
+  $x = 1 + 1;
+}`;
+            var rez = converter(text);
+            //console.log(JSON.stringify(rez));
+            //console.log(flowTranslator(rez));
+    
+            chai.expect(rez[0].type).to.equal("start");
+            chai.expect(rez[rez.length-1].type).to.equal("end");
+            chai.expect(rez[2].type).to.equal("condition");
+            chai.expect(rez[3].expr).to.equal("x = 1 + 1");
 		});
 
     });
