@@ -1,7 +1,6 @@
 var workspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
 
-document.getElementById("export").onclick = function(e) {
-	e.preventDefault();
+var x = function() {
 	var code = Blockly.PHP.workspaceToCode(workspace);
 	console.log(code);
 	return false;
