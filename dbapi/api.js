@@ -48,7 +48,40 @@ class DbApi {
 				});
 		});
     }
-    
+
+    addCode(xmlCode) {
+        return new Promise ((resolve, reject) => {
+            this.connection.query(
+				'INSERT INTO code_sharing (xml_code) VALUES (?)',
+				[xmlCode],
+				(err, results, fields) => {
+					resolve(results);
+				});
+        });
+    }
+
+    getCodeById(id) {
+        return new Promise ((resolve, reject) => {
+            this.connection.query(
+				'SELECT * FROM code_sharing WHERE id = ?',
+				[id],
+				(err, results, fields) => {
+					resolve(results);
+				});
+        });
+    }
+
+    /// userId - is the id of the author of the lesson
+    addLesson(userId, content) {
+        return new Promise ((resolve, reject) => {
+            this.connection.query(
+				'INSERT INTO lessons (author, content, date_added) VALUES (?, ?, ?)',
+				[userId, content, (new Date()).toISOString().substring(0, 19).replace('T', ' ')],
+				(err, results, fields) => {
+					resolve(results);
+				});
+        });
+    }
 }
 
 module.exports = DbApi;

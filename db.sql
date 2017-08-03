@@ -19,7 +19,7 @@ CREATE TABLE `tests` (
 	`id` int NOT NULL,
 	`input` TEXT NOT NULL,
 	`output` TEXT NOT NULL,
-	`problem_id`  NOT NULL,
+	`problem_id` int NOT NULL,
 	PRIMARY KEY (`id`)
 );
 
