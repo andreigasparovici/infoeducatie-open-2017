@@ -12,18 +12,46 @@ var Block = function(e, t) {
     this.type = t;
     this.id = "e" + (++globalIdCount);
     this.edges = [];
+    blockMap[this.id] = this;
+}
+
+var getBlockById = function(id) {
+    return blockMap[id];
 }
 
 var addEdge = function(a, b, t) {
-    if (a == null || b == null)
+    if (a == null || b == null || a.id == b.id)
         return;
     a.edges.push(new Edge(a.id, b.id, t));
     //b.edges.push(new Edge(b.id, a.id, t));
 }
 
+/**
+ * 
+ * @param {Block} a 
+ * @param {Block} b 
+ * @param {String} t 
+ */
+var addSuccessorEdge = function(a, b, t) {
+    /*console.log(a);
+    console.log("si");
+    console.log(b);*/
+    if (a == null || b == null)
+        return;
+    for (var i = 0; i < a.edges.length; i++) {
+        var p = a.edges[i].y;
+        var zp = getBlockById(p);
+        //console.log(p + " " + JSON.stringify(zp));
+        addSuccessorEdge(getBlockById(a.edges[i].y), b, t);
+    }
+    if (a.edges.length == 0 || (a.edges.length == 1 && a.type == "condition"))
+        addEdge(a, b, t);
+}
+
 var parseCursor;
 var phpCode;
 var blocks = [];
+var blockMap;
 var globalIdCount = 0;
 
 var isWhite = function(c) {
@@ -83,6 +111,7 @@ var convert = function(phpText) {
     blocks = [];
     globalIdCount = 0;
     parseCursor = 0;
+    blockMap = {};
     phpCode = phpText;
     blocks.push(new Block("START", "START"));
     addEdge(blocks[0], parsePhpCode(), "EMPTY");
@@ -98,7 +127,7 @@ var addBlock = function(e, t) {
 /**
  * @return null if it is an invalid block
  */
-var parsePhpCode = function() {
+var parsePhpCode = function(runOnce) {
     slideWhites();
     if (phpCode[parseCursor] == '}')
         return null;
@@ -112,7 +141,8 @@ var parsePhpCode = function() {
             return parsePhpCode();
         else
             toR = addBlock(expression, "operation"); 
-        addEdge(toR, parsePhpCode(), "EMPTY");
+        if (!runOnce)
+            addEdge(toR, parsePhpCode(), "EMPTY");
         return toR;
     }
     else if (phpCode[parseCursor] == 'i') {
@@ -132,12 +162,13 @@ var parsePhpCode = function() {
                 goPast('}');
             }
             else 
-                NU = parsePhpCode();
+                NU = parsePhpCode(true);
             addEdge(toR, NU, "NU");
         }
-        var continuation = parsePhpCode();
-        addEdge(DA, continuation, "EMPTY");
-        addEdge(NU, continuation, "EMPTY");
+        if (!runOnce) {
+            var continuation = parsePhpCode();
+            addSuccessorEdge(toR, continuation, "EMPTY");
+        }
         return toR;
     }
 }
