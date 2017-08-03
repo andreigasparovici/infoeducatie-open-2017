@@ -1,5 +1,4 @@
 var fs = require('fs');
-var globalIdCount = 0;
 
 /// Edge between i and j with type t
 var Edge = function(i, j, t) {
@@ -16,6 +15,8 @@ var Block = function(e, t) {
 }
 
 var addEdge = function(a, b, t) {
+    if (a == null || b == null)
+        return;
     a.edges.push(new Edge(a.id, b.id, t));
     //b.edges.push(new Edge(b.id, a.id, t));
 }
@@ -23,6 +24,7 @@ var addEdge = function(a, b, t) {
 var parseCursor;
 var phpCode;
 var blocks = [];
+var globalIdCount = 0;
 
 var isWhite = function(c) {
     if (c == ' ' || c == '\t' || c == '\n')
@@ -43,6 +45,24 @@ var getToSemicolon = function() {
     return news;
 }
 
+var getToParantText = function() {
+    var news = "";
+    var inpar = 0;
+    while (parseCursor < phpCode.length) {
+        if (phpCode[parseCursor] == '(')
+            inpar++;
+        else if (phpCode[parseCursor] == ')') {
+            inpar--;
+            if (inpar == 0)
+                return news;
+        }
+        else if (inpar == 1)
+            news += phpCode[parseCursor];
+        parseCursor++;
+    }
+    return news;
+}
+
 var eliminateHolders = function(text) {
     var news = "";
     for (var i = 0; i < text.length; i++)
@@ -51,9 +71,17 @@ var eliminateHolders = function(text) {
     return news;
 }
 
+var goPast = function(c) {
+    while (parseCursor < phpCode.length) {
+        if (phpCode[parseCursor++] == c)
+            return;
+    }
+}
+
 /// Creates execution graph from php code
 var convert = function(phpText) {
     blocks = [];
+    globalIdCount = 0;
     parseCursor = 0;
     phpCode = phpText;
     blocks.push(new Block("START", "START"));
@@ -67,8 +95,13 @@ var addBlock = function(e, t) {
     return b;
 }
 
+/**
+ * @return null if it is an invalid block
+ */
 var parsePhpCode = function() {
     slideWhites();
+    if (phpCode[parseCursor] == '}')
+        return null;
     if (parseCursor >= phpCode.length)
         return addBlock("STOP", "STOP");
     if (phpCode[parseCursor] == '$') {
@@ -80,6 +113,31 @@ var parsePhpCode = function() {
         else
             toR = addBlock(expression, "operation"); 
         addEdge(toR, parsePhpCode(), "EMPTY");
+        return toR;
+    }
+    else if (phpCode[parseCursor] == 'i') {
+        var expression = getToParantText();
+        expression = eliminateHolders(expression);
+        goPast('{');
+        var toR = addBlock(expression, "condition");
+        var DA = parsePhpCode();
+        var NU = null;
+        addEdge(toR, DA, "DA");
+        goPast('}'); parseCursor++;
+        if (phpCode[parseCursor] == 'e') {
+            parseCursor += 5;
+            if (phpCode[parseCursor] == '{') {
+                parseCursor++;
+                NU = parsePhpCode();
+                goPast('}');
+            }
+            else 
+                NU = parsePhpCode();
+            addEdge(toR, NU, "NU");
+        }
+        var continuation = parsePhpCode();
+        addEdge(DA, continuation, "EMPTY");
+        addEdge(NU, continuation, "EMPTY");
         return toR;
     }
 }
