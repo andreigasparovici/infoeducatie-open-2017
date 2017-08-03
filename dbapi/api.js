@@ -34,7 +34,7 @@ class DbApi {
 	loginUser(email, password) {
 		return new Promise((resolve, reject) => {
 			this.connection.query(
-				'SELECT name, id, password FROM `users` WHERE `email` = ?',
+				'SELECT name, activated, is_author, id, password FROM `users` WHERE `email` = ?',
 				[email],
 				(err, results, fields) => {
 					if(err) reject(err);
