@@ -9,13 +9,15 @@ var SDebugger = function(bs, outS) {
 }
 
 var lookup = function(arithmetic, st, dr, arr) {
-	var inpar = 0;
+	var inpar = 0, inghi = 0;
 	for (var i = dr; i >= st; i--) {
 		if (arithmetic[i] == ')')
 			inpar++;
-		else if (arithmetic[i] == '(')
+		if (arithmetic[i] == '(')
 			inpar--;
-		else if (inpar == 0) {
+		if (arithmetic[i] == '\'')
+			inghi = !inghi;
+		if (inpar == 0 && inghi == 0) {
 			for (var j = 0; j < arr.length; j++)
 				if (arithmetic[i] == arr[j])
 					return i;
@@ -33,8 +35,6 @@ SDebugger.prototype.evaluate = function(arithmetic, st, dr) {
 		return 0;
 	while (arithmetic[st] == ' ') st++;
 	while (arithmetic[dr] == ' ') dr--;
-	if (arithmetic[st] == '\'' && arithmetic[dr] == '\'')
-		return arithmetic.substr(st+1, dr-st-1);
 	if ((pos = lookup(arithmetic, st, dr, ['+', '-'])) != -1) {
 		if (arithmetic[pos] == '+')
 			return this.evaluate(arithmetic, st, pos-1) + this.evaluate(arithmetic, pos+1, dr);
@@ -48,13 +48,16 @@ SDebugger.prototype.evaluate = function(arithmetic, st, dr) {
 		else
 			return this.evaluate(arithmetic, st, pos-1) / this.evaluate(arithmetic, pos+1, dr);
 	}
+	var inpar = 0, inghi = 0;
 	for (var i = dr; i >= st; i--) {
-		var inpar = 0;
 		if (arithmetic[i] == ')')
 			inpar++;
-		else if (arithmetic[i] == '(')
+		if (arithmetic[i] == '(')
 			inpar--;
-		else if (inpar == 0) {
+		if (arithmetic[i] == '\'') {
+			inghi = !inghi;
+		}
+		if (inpar == 0 && inghi == 0) {
 			if (arithmetic[i] == '<')
 				return this.evaluate(arithmetic, st, i-1) < this.evaluate(arithmetic, i+1, dr);
 			if (arithmetic[i] == '>')
@@ -71,6 +74,8 @@ SDebugger.prototype.evaluate = function(arithmetic, st, dr) {
 	}
 	if (arithmetic[st] == '(' && arithmetic[dr] == ')')
 		return eval(arithmetic, st+1, dr-1);
+	if (arithmetic[st] == '\'' && arithmetic[dr] == '\'')
+		return arithmetic.substr(st+1, dr-st-1);
 	var rest = "";
 	for (var i = st; i <= dr; i++)
 		rest += arithmetic[i];
@@ -79,7 +84,7 @@ SDebugger.prototype.evaluate = function(arithmetic, st, dr) {
 	}
 	if (this.varValues[rest])
 		return this.varValues[rest];
-	console.log("ERROR");
+	console.log("ERROR at " + arithmetic);
 	return 10;
 }
 

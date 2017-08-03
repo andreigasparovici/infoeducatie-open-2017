@@ -139,7 +139,7 @@ e6=>end: Stop`);
     });
 
     describe("Testing scheme debug", () => {
-        it ("Check debug 1", () => {
+        it ("Check debug 1 (if)", () => {
             var text = `$x;
 $y;
 $x = 12 + 15;
@@ -175,7 +175,7 @@ if ($x == 1) {
             debug.next();
         });
 
-        it ("Check debug 2", () => {
+        it ("Check debug 2 (while)", () => {
             var text = `$x;
 $y;
 $y = 20;
@@ -195,6 +195,30 @@ while ($x < 30) {
                 debug.next();
             }
             chai.expect(arr).to.deep.equal([25, 26, 27, 28, 29, 30]);
+        });
+
+        it ("Check debug 3 (for)", () => {
+            var text = `$x;
+$i;
+$x = 3;
+for ($i = 15; $i <= 23; $i = $i + 2) {
+  if ($x == 3) {
+    $x = $x + 1;
+  } else {
+    $x = $x + 2;
+  }
+  print('i = ' + $i + ' => x = ' + $x);
+}`;
+            var rez = converter(text), arr = [];
+            //console.log(flowTranslator(rez));   
+            var debug = new SchemeDebug(rez, (data) => {
+                 arr.push(data);
+            });
+            while (debug.currentBlock) {
+                debug.next();
+            }
+            chai.expect(arr[0]).to.equal("i = 15 => x = 4");
+            chai.expect(arr[1]).to.equal("i = 17 => x = 6");
         });
     });
 
