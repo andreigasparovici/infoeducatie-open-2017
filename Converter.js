@@ -113,7 +113,7 @@ var convert = function(phpText) {
     parseCursor = 0;
     blockMap = {};
     phpCode = phpText;
-    blocks.push(new Block("START", "START"));
+    blocks.push(new Block("Start", "start"));
     addEdge(blocks[0], parsePhpCode(), "EMPTY");
     return blocks;
 }
@@ -132,7 +132,7 @@ var parsePhpCode = function(runOnce) {
     if (phpCode[parseCursor] == '}')
         return null;
     if (parseCursor >= phpCode.length)
-        return addBlock("STOP", "STOP");
+        return addBlock("Stop", "end");
     if (phpCode[parseCursor] == '$') {
         var expression = getToSemicolon()
         expression = eliminateHolders(expression);
