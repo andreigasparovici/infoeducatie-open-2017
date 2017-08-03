@@ -17,11 +17,12 @@ var Block = function(e, t) {
 
 var addEdge = function(a, b, t) {
     a.edges.push(new Edge(a.id, b.id, t));
-    b.edges.push(new Edge(b.id, a.id, t));
+    //b.edges.push(new Edge(b.id, a.id, t));
 }
 
 var parseCursor;
 var phpCode;
+var blocks = [];
 
 var isWhite = function(c) {
     if (c == ' ' || c == '\t' || c == '\n')
@@ -52,26 +53,38 @@ var eliminateHolders = function(text) {
 
 /// Creates execution graph from php code
 var convert = function(phpText) {
-    this.blocks = [];
+    blocks = [];
     parseCursor = 0;
     phpCode = phpText;
-    this.blocks.push(new Block("START", "START"));
-    addEdge(this.blocks[0], parsePhpCode(phpCode), "EMPTY");
-    return phpCode;
+    blocks.push(new Block("START", "START"));
+    addEdge(blocks[0], parsePhpCode(), "EMPTY");
+    return blocks;
+}
+
+var addBlock = function(e, t) {
+    var b = new Block(e, t);
+    blocks.push(b);
+    return b;
 }
 
 var parsePhpCode = function() {
     slideWhites();
     if (parseCursor >= phpCode.length)
-        return new Block("", "EMPTY");
+        return addBlock("STOP", "STOP");
     if (phpCode[parseCursor] == '$') {
         var expression = getToSemicolon()
         expression = eliminateHolders(expression);
+        var toR;
         if (!expression.includes('='))
-            return new Block("", "EMPTY");
-        return new Block(expression, "operation"); 
+            return parsePhpCode();
+        else
+            toR = addBlock(expression, "operation"); 
+        addEdge(toR, parsePhpCode(), "EMPTY");
+        return toR;
     }
 }
 
-var phpText = fs.readFileSync('phptestfile.php');
-console.log(JSON.stringify(convert(phpText)));
+//var phpText = fs.readFileSync('phptestfile.php');
+//console.log(JSON.stringify(convert(phpText)));
+
+module.exports = convert;

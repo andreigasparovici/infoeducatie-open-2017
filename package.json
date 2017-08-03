@@ -4,13 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-	"start": "node server.js"
+    "test": "./node_modules/mocha/bin/mocha -R spec",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.15.3"
+  },
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "mocha": "^3.5.0"
   }
 }
