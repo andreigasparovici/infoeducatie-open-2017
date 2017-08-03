@@ -25,11 +25,8 @@ document.getElementById("generate_schema").onclick = function() {
 	$.post('/schema', {
 		code: getPhpCode()
 	}, function(data) {
+		$('#diagram').html('');
 		var diagram = flowchart.parse(data);
 		diagram.drawSVG('diagram');
 	});
 };
-
-dialog.querySelector('.close').addEventListener('click', function() {
-	dialog.close();
-});
