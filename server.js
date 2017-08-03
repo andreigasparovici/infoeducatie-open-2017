@@ -1,6 +1,9 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const flash = require('express-flash');
+
 const app = express();
 
 require('dotenv').config();
@@ -10,22 +13,47 @@ app.use(express.static(path.join(__dirname, 'static')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(flash());
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true
+}));
+
 app.set('view engine', 'ejs');
 
-// ELEV
+function checkAuth(req, res, next) {
+	return req.session.user ? next() : res.redirect('/login');
+}
+
 app.get('/', (req, res) => {
-	res.render("elev/dashboard");
+	if(req.session.user)
+		if(!req.session.user.teacher)
+			res.render("elev/dashboard");
+		else res.render("profesor/dashboard");
+	else {
+		res.render("anonim/dashboard");
+	}
 });
 
-app.get('/lectii', (req, res) => {
+app.get('/login', (req, res) => {
+	res.render("login");
+});
+
+app.get('/signup', (req, res) => {
+	res.render("signup");
+});
+
+app.get('/lectii', checkAuth, (req, res) => {
 	res.render("elev/lectii");
 });
 
-app.get('/workspace', (req, res) => {
+app.get('/workspace', checkAuth, (req, res) => {
 	res.render("elev/workspace");
 });
 
-app.get('/probleme', (req, res) => {
+app.get('/probleme', checkAuth, (req, res) => {
 	res.render("elev/probleme");
 });
 
