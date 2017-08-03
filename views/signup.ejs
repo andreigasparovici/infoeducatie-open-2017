@@ -34,6 +34,9 @@
 					<div class="mdl-card__title">
 						<h2 class="mdl-card__title-text">Înregistrare</h2>
 					</div>
+					<% if(messages.error) { %>
+						<div style="color: red; padding: 10px;"><b>Eroare:</b> <%=messages.error%></div>
+					<% } %>
 					<form action="/signup" method="post">
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 							<input class="mdl-textfield__input" type="name" id="name" name="name" autofocus>
@@ -53,8 +56,8 @@
 							<label class="mdl-textfield__label" for="password_confirm">Confirmare parolă</label>
 						</div>
 						<div style="padding:10px; text-align: left;">
-							<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-1">
-								<input type="checkbox" id="switch1" class="mdl-switch__input" name="is_teacher">
+							<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="is_teacher">
+								<input type="checkbox" id="is_teacher" class="mdl-switch__input" name="is_teacher">
 								<span class="mdl-switch__label">Profesor</span>
 							</label>
 						</div>

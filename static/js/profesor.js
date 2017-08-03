@@ -26,8 +26,19 @@ var editor = window.pell.init({
 		}
 	],
 	onChange: function (html) {
-		document.getElementById('text-output').innerHTML = html;
-		document.getElementById('html-output').textContent = html;
+		//document.getElementById('text-output').innerHTML = html;
+		//document.getElementById('html-output').textContent = html;
 		Cookies.set('pell_content', html);
 	}
 })
+
+document.getElementById("adauga").onclick = function() {
+	$.post('/lectie/adauga', {
+		content: editor.content.innerHTML,
+		name: document.getElementById("titlu").value
+	}, function(data) {
+		if(data.success) {
+			alert('Lecţia a fost adăugată cu succes!');
+		}
+	});
+};

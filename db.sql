@@ -1,5 +1,9 @@
+DROP DATABASE IF EXISTS open2017;
+CREATE DATABASE open2017 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE open2017;
+
 CREATE TABLE `users` (
-	`id` int NOT NULL,
+	`id` int AUTO_INCREMENT NOT NULL,
 	`email` varchar(50) NOT NULL UNIQUE,
 	`password` varchar(200) NOT NULL,
 	`is_teacher` INT(5) NOT NULL DEFAULT '0',
@@ -9,14 +13,14 @@ CREATE TABLE `users` (
 );
 
 CREATE TABLE `problems` (
-	`id` int NOT NULL,
+	`id` int AUTO_INCREMENT NOT NULL,
 	`text` TEXT NOT NULL,
 	`level` varchar(30) NOT NULL DEFAULT 'usor',
 	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `tests` (
-	`id` int NOT NULL,
+	`id` int AUTO_INCREMENT NOT NULL,
 	`input` TEXT NOT NULL,
 	`output` TEXT NOT NULL,
 	`problem_id` int NOT NULL,
@@ -24,15 +28,16 @@ CREATE TABLE `tests` (
 );
 
 CREATE TABLE `lessons` (
-	`id` int NOT NULL,
+	`id` int AUTO_INCREMENT NOT NULL,
 	`author` int NOT NULL,
+	`title` varchar(30) NOT NULL,
 	`content` TEXT NOT NULL,
 	`date_added` DATETIME,
 	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `results` (
-	`id` int NOT NULL,
+	`id` int AUTO_INCREMENT NOT NULL,
 	`user_id` INT NOT NULL,
 	`problem_id` INT NOT NULL,
 	`points` int DEFAULT '-1',

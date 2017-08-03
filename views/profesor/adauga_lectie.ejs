@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Profesor</title>
+		<link rel="stylesheet" href="/mdl/material.min.css">
+		<link rel="stylesheet" href="/css/profesor.css">
+		<link rel="stylesheet" href="/css/pell.min.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	</head>
+	<body>
+		<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+			<header class="mdl-layout__header">
+				<div class="mdl-layout__header-row">
+					<span class="mdl-layout-title">Profesor</span>
+					<div class="mdl-layout-spacer"></div>
+					<nav class="mdl-navigation mdl-layout--large-screen-only">
+						<!--<a class="mdl-navigation__link" href="" id="export">Export code</a>-->
+					</nav>
+				</div>
+			</header>
+			<div class="mdl-layout__drawer">
+				<span class="mdl-layout-title">Options</span>
+				<nav class="mdl-navigation">
+					<a class="mdl-navigation__link" href="">Save session</a>
+					<!--<a class="mdl-navigation__link" href="">Link</a>-->
+				</nav>
+			</div>
+			<main class="mdl-layout__content">
+			<div id="demo-snackbar-example" class="mdl-js-snackbar mdl-snackbar">
+				<div class="mdl-snackbar__text">Lecţia a fost adăugată cu success</div>
+				<button class="mdl-snackbar__action" type="button">Ok</button>
+			</div>
+		<div class="page-content">
+			<center>
+				<h5 align="center">Adaugă o lecţie</h5>
+
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+					<input type="text" class="mdl-textfield__input" autofocus id="titlu"/>
+					<label class="mdl-textfield__label">Titlul lecţiei</label>
+				</div>
+			</center>
+
+			<br>
+			<div id="pell"></div>
+			<br>
+
+			<center id="action">
+				<div class="mdl-card__actions mdl-card--border">
+					<button id="adauga"
+			 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+						Adaugă lecţie
+					</button>
+				</div>
+			</center>
+		</div>
+			</main>
+			</div>
+
+			<script src="/mdl/material.min.js"></script>
+			<script src="/js/pell.min.js"></script>
+			<script src="/js/jquery.min.js"></script>
+			<script src="/js/js.cookie.js"></script>
+			<script src="/js/profesor.js"></script>
+	</body>
+</html>
