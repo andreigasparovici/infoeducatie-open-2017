@@ -19,6 +19,20 @@ $y = 2*$x + $y;`;
             chai.expect(rez[4].expr).to.equal("y = 2*x + y");
             chai.expect(rez[5].expr).to.equal("Stop");
         });
+
+        it('Check print', () => {
+            var text = `$x;
+$y;
+$x = 12 + 15;
+print('abc');
+$x = $x + 10;
+$y = 2*$x + $y;`;
+            var rez = converter(text);
+            //console.log(rez);
+            chai.expect(rez[0].type).to.equal("start");
+            chai.expect(rez[rez.length-1].type).to.equal("end");
+            chai.expect(rez[2].type).to.equal("inputoutput");
+        });
         
         it('Check if', () => {
             var text = `$x;
@@ -80,6 +94,26 @@ while ($x < 30) {
             chai.expect(rez[rez.length-1].type).to.equal("end");
             chai.expect(rez[2].type).to.equal("condition");
             chai.expect(rez[3].expr).to.equal("x = 1 + 1");
+        });
+        
+          it('Check for', () => {
+            var text = `$x;
+$i;
+for ($i = 15; $i <= 23; $i += 2) {
+  if ($x == 3) {
+    $x = $x + 1;
+  } else {
+    $x = $x + 2;
+  }
+  print('i');
+}`;
+            var rez = converter(text);
+            //console.log(JSON.stringify(rez));
+            //console.log(flowTranslator(rez));
+            chai.expect(rez[0].type).to.equal("start");
+            chai.expect(rez[rez.length-1].type).to.equal("end");
+            chai.expect(rez[2].type).to.equal("condition");
+            chai.expect(rez[3].type).to.equal("condition");
 		});
 
     });
