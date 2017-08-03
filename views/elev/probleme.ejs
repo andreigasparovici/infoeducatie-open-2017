@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Pagina principală</title>
+		<link rel="stylesheet" href="/mdl/material.min.css">
+		<link rel="stylesheet" href="/css/elev/dashboard.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	</head>
+	<body>
+		<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+			<header class="mdl-layout__header">
+				<div class="mdl-layout__header-row">
+					<span class="mdl-layout-title">Probleme</span>
+					<div class="mdl-layout-spacer"></div>
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+					mdl-textfield--floating-label mdl-textfield--align-right">
+						<label class="mdl-button mdl-js-button mdl-button--icon"
+							 for="fixed-header-drawer-exp">
+							<i class="material-icons">search</i>
+						</label>
+						<div class="mdl-textfield__expandable-holder">
+							<input class="mdl-textfield__input" type="text" name="sample"
+							id="fixed-header-drawer-exp">
+						</div>
+					</div>
+				</div>
+			</header>
+			<div class="mdl-layout__drawer">
+				<span class="mdl-layout-title">Opţiuni</span>
+				<nav class="mdl-navigation">
+					<a class="mdl-navigation__link" href="/">
+						<div class="material-icons mdl-badge mdl-badge--overlap">dashboard</div>
+						Pagina principală
+					</a>
+					<a class="mdl-navigation__link" href="/lectii">
+						<div class="material-icons mdl-badge mdl-badge--overlap" data-badge="1">book</div>
+						Lecţii
+					</a>
+					<a class="mdl-navigation__link" href="/probleme">
+						<div class="material-icons mdl-badge mdl-badge--overlap" data-badge="1">library_books</div>
+						Probleme
+					</a>
+					<a class="mdl-navigation__link" href="/workspace">
+						<div class="material-icons mdl-badge mdl-badge--overlap">code</div>
+						Workspace
+					</a>
+				</nav>
+			</div>
+			<main class="mdl-layout__content">
+			<div class="page-content">
+				<div class="mdl-card mdl-shadow--3dp">
+					<div class="mdl-card__title">
+						<h4 class="mdl-card__title-text">Ultimele lecţii adăugate:</h4>
+					</div>
+					<div class="mdl-card__supporting-text">
+						<ul class="mdl-list">
+							<li class="mdl-list__item">
+								<span class="mdl-list__item-primary-content">
+									<a href="#">Operaţii aritmetice</a>
+								</span>
+							</li>
+							<li class="mdl-list__item">
+								<span class="mdl-list__item-primary-content">
+									<a href="#">Instrucţiunea condiţională</a>
+								</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+			</div>
+			</main>
+		</div>
+
+		<script src="/mdl/material.min.js"></script>
+		<script src="/js/js.cookie.js"></script>
+	</body>
+</html>
+

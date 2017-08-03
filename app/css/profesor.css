@@ -1,0 +1,26 @@
+form {
+	padding: 10px;
+	padding-bottom: 0px;
+	margin-top: 20px;
+	width: 40% !important;
+}
+
+.mdl-grid.center-items {
+	justify-content: center;
+}
+
+#pell {
+	padding: 20px;
+	transform: translateY(-30px);
+	margin: 10px;
+	border-radius: 3px;
+	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.pell-content {
+	font-size: 20px;
+}
+
+#action {
+	transform: translateY(-30px);
+}

@@ -1,0 +1,15 @@
+.page-content {
+	padding: 20px;
+}
+.mdl-list{
+	width: 100%;
+}
+
+.mdl-card {
+	width: 100%;
+}
+
+.mdl-list__item-secondary-content {
+	font-size: .9em;
+	color: gray;
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Elev</title>
+		<link rel="stylesheet" href="/mdl/material.min.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	</head>
+	<body>
+		<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+			<header class="mdl-layout__header">
+				<div class="mdl-layout__header-row">
+					<span class="mdl-layout-title">Title</span>
+					<div class="mdl-layout-spacer"></div>
+					<nav class="mdl-navigation mdl-layout--large-screen-only">
+						<a class="mdl-navigation__link" href="" id="export">Export code</a>
+					</nav>
+				</div>
+			</header>
+			<div class="mdl-layout__drawer">
+				<span class="mdl-layout-title">Options</span>
+				<nav class="mdl-navigation">
+					<a class="mdl-navigation__link" href="/lectii">Lecţii</a>
+					<a class="mdl-navigation__link" href="/probleme">Probleme</a>
+					<a class="mdl-navigation__link" href="/workspace">Workspace</a>
+				</nav>
+			</div>
+			<main class="mdl-layout__content">
+				<div class="page-content">
+					<div id="blocklyDiv" style="height: 600px; width: 1250px;"></div>
+				</div>
+			</main>
+		</div>
+
+		<xml id="toolbox" style="display: none">
+			<block type="controls_if"></block>
+			<block type="controls_repeat_ext"></block>
+			<block type="logic_compare"></block>
+			<block type="math_number"></block>
+			<block type="math_arithmetic"></block>
+			<block type="text"></block>
+			<block type="text_print"></block>
+			<block type="controls_if"></block>
+			<block type="controls_whileUntil"></block>
+			<block type="math_number">
+		</xml>
+
+		<script src="/google-blockly-fdb2698/blockly_compressed.js"></script>
+		<script src="/google-blockly-fdb2698/blocks_compressed.js"></script>
+		<!--<script src="/google-blockly-fdb2698/javascript_compressed.js"></script>
+		<script src="/google-blockly-fdb2698/python_compressed.js"></script>-->
+		<script src="/google-blockly-fdb2698/php_compressed.js"></script>
+		<script src="/google-blockly-fdb2698/msg/js/ro.js"></script>
+		<script src="/mdl/material.min.js"></script>
+		<script src="/js/js.cookie.js"></script>
+		<script src="/js/elev.js"></script>
+	</body>
+</html>
