@@ -174,6 +174,28 @@ if ($x == 1) {
             chai.expect(debug.varValues["y"]).to.equal(4);
             debug.next();
         });
+
+        it ("Check debug 2", () => {
+            var text = `$x;
+$y;
+$y = 20;
+$x = 2*y - 15 - 1;
+while ($x < 30) {
+  $x = $x + 1;
+  print($x);
+}`;
+            var rez = converter(text), arr = [];
+            //console.log(flowTranslator(rez));   
+            var debug = new SchemeDebug(rez, (data) => {
+                 //console.log("xd " + data);
+                 arr.push(data);
+                 //chai.expect(data).to.equal(5);
+            });
+            while (debug.currentBlock) {
+                debug.next();
+            }
+            chai.expect(arr).to.deep.equal([25, 26, 27, 28, 29, 30]);
+        });
     });
 
 });

@@ -27,7 +27,7 @@ var lookup = function(arithmetic, st, dr, arr) {
 SDebugger.prototype.evaluate = function(arithmetic, st, dr) {
 	var pos;
 	if (!st) st = 0;
-	if (!dr) dr = arithmetic.length-1;
+	if (dr == undefined) dr = arithmetic.length-1;
 	//console.log(arithmetic + " " + st + " " + dr);
 	if (st > dr)
 		return 0;
@@ -42,8 +42,9 @@ SDebugger.prototype.evaluate = function(arithmetic, st, dr) {
 			return this.evaluate(arithmetic, st, pos-1) - this.evaluate(arithmetic, pos+1, dr);
 	}
 	if ((pos = lookup(arithmetic, st, dr, ['*', '/'])) != -1) {
-		if (arithmetic[pos] == '*')
+		if (arithmetic[pos] == '*') {
 			return this.evaluate(arithmetic, st, pos-1) * this.evaluate(arithmetic, pos+1, dr);
+		}
 		else
 			return this.evaluate(arithmetic, st, pos-1) / this.evaluate(arithmetic, pos+1, dr);
 	}
