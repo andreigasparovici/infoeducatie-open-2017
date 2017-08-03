@@ -25,7 +25,7 @@ CREATE TABLE `tests` (
 
 CREATE TABLE `lessons` (
 	`id` int NOT NULL,
-	`author`  NOT NULL,
+	`author` int NOT NULL,
 	`content` TEXT NOT NULL,
 	`date_added` DATETIME,
 	PRIMARY KEY (`id`)
@@ -33,8 +33,8 @@ CREATE TABLE `lessons` (
 
 CREATE TABLE `results` (
 	`id` int NOT NULL,
-	`user_id`  NOT NULL,
-	`problem_id`  NOT NULL,
+	`user_id` INT NOT NULL,
+	`problem_id` INT NOT NULL,
 	`points` int DEFAULT '-1',
 	PRIMARY KEY (`id`)
 );

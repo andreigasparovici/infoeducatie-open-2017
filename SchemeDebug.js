@@ -11,7 +11,7 @@ SDebugger.prototype.processState = function(block) {
 
 }
 
-SDebugger.prototype.nextBlock = function(block) {
+SDebugger.prototype.nextBadBlock = function(block) {
     if (block.edges.length < 2) {
         console.log("ERROR");
     }
