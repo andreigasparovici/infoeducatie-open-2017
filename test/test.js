@@ -150,13 +150,15 @@ if ($x == 25) {
 } else {
   $x = 3;
 }
-if (5 == 5) {
+if ($x == 1) {
   $y = 4;
+  print($x + $y);
 }`;
             var rez = converter(text);
             //console.log(flowTranslator(rez));   
             var debug = new SchemeDebug(rez, (data) => {
-                console.log("xd " + data);
+                //console.log("xd " + data);
+                chai.expect(data).to.equal(5);
             });
             debug.next();
             debug.next();
@@ -170,6 +172,7 @@ if (5 == 5) {
             debug.next();
             debug.next();
             chai.expect(debug.varValues["y"]).to.equal(4);
+            debug.next();
         });
     });
 
