@@ -134,7 +134,7 @@ var parsePhpCode = function(runOnce) {
     if (parseCursor >= phpCode.length)
         return addBlock("Stop", "end");
     if (phpCode[parseCursor] == '$') {
-        var expression = getToSemicolon()
+        var expression = getToSemicolon();
         expression = eliminateHolders(expression);
         var toR;
         if (!expression.includes('='))
@@ -183,6 +183,60 @@ var parsePhpCode = function(runOnce) {
         if (!runOnce) {
             var continuation = parsePhpCode();
             addEdge(toR, continuation, "NU");
+        }
+        return toR;
+    }
+    else if (phpCode[parseCursor] == 'p') {
+        var expression = getToParantText();
+        parseCursor+=2;
+        expression = eliminateHolders(expression);
+        var toR;
+        toR = addBlock("scrie " + expression, "inputoutput"); 
+        if (!runOnce)
+            addEdge(toR, parsePhpCode(), "EMPTY");
+        return toR;
+    }
+    else if (phpCode[parseCursor] == 'f') {
+        var expression = getToParantText();
+        expression = eliminateHolders(expression);
+        var init = "", cond="", pas="", ipos = 0;
+        for (; ipos < expression.length; ipos++) {
+            if (expression[ipos] == ';') {
+                break;
+            }
+            init += expression[ipos];
+        }
+        ipos+=2;
+        for (; ipos < expression.length; ipos++) {
+            if (expression[ipos] == ';') {
+                break;
+            }
+            cond += expression[ipos];
+        }
+        ipos+=2;
+        for (var inp = 0; ipos < expression.length; ipos++) {
+            if (expression[ipos] == '(')
+                inp++;
+            if (expression[ipos] == ')') {
+                inp--;
+                if (inp == 0)
+                    break;
+            }
+            pas += expression[ipos];
+        }
+        goPast('{');
+        var toR = addBlock(init, "operation");
+        var forOp = addBlock(cond, "condition");
+        addEdge(toR, forOp, "EMPTY");
+        var DA = parsePhpCode();
+        addEdge(forOp, DA, "DA");
+        goPast('}');
+        var pasOp = addBlock(pas, "operation");
+        addSuccessorEdge(DA, pasOp, "EMPTY");
+        addEdge(pasOp, forOp, "EMPTY");
+        if (!runOnce) {
+            var continuation = parsePhpCode();
+            addEdge(forOp, continuation, "NU");
         }
         return toR;
     }
