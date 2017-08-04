@@ -53,8 +53,16 @@ try{
 }
 
 var currentHighlight = null;
-socket.on("highlight", function(id) {
-	changeHighlight(id);
+socket.on("highlight", function(data) {
+	if (data.flag != null) {
+		var x = prompt(data.flag + " = ?");
+		socket.emit("read_variable", {expr: data.flag, value: x});
+	}
+	changeHighlight(data.high);
+});
+
+socket.on("debug_output", function(data) {
+	alert(data);
 });
 
 var changeHighlight = function(id) {

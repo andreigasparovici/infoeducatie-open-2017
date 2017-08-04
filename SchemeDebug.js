@@ -4,6 +4,7 @@ var SDebugger = function(bs, outS) {
 	this.varValues = {};
 	this.blockMap = {};
 	this.outputSubscriber = outS;
+	this.flagRead = null;
 	for (var i = 0; i < bs.length; i++)
 		this.blockMap[bs[i].id] = bs[i];
 }
@@ -119,7 +120,13 @@ SDebugger.prototype.processState = function(block) {
 			this.onOutput(this.evaluate(txt)); /// this includes character types !!!
 		}
 		else {
-			/// citire
+			var txt = "", pos = 0;
+			while (block.expr[pos] != ' ')
+				pos++;
+			for (pos = pos+1; pos < block.expr.length; pos++)
+				txt += block.expr[pos];
+			txt = txt.trim();
+			this.flagRead = txt;
 		}
 	}
 }

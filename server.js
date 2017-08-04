@@ -47,13 +47,21 @@ io.on('connection', (socket) => {
 		var rez = Converter(phpCode);
 		debuggerInstances[socket.id] = new SchemeDebug(rez, (data) => {
 			console.log(socket.id + ": " + data);
+			socket.emit("debug_output", data);
 		});
-		socket.emit("highlight", debuggerInstances[socket.id].getHighId());
+		socket.emit("highlight", {high: debuggerInstances[socket.id].getHighId(), 
+			flag: debuggerInstances[socket.id].flagRead});
 	});
 
 	socket.on("step", () => {
+		debuggerInstances[socket.id].flagRead = null;
 		debuggerInstances[socket.id].next();
-		socket.emit("highlight", debuggerInstances[socket.id].getHighId());
+		socket.emit("highlight", {high: debuggerInstances[socket.id].getHighId(), 
+			flag: debuggerInstances[socket.id].flagRead});
+	});
+
+	socket.on("read_variable", (data) => {
+		debuggerInstances[socket.id].varValues[data.expr] = parseInt(data.value);
 	});
 });
 
