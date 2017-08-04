@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Adaugă problemă</title>
+		<link rel="stylesheet" href="/mdl/material.min.css">
+		<link rel="stylesheet" href="/css/profesor.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" href="/css/getmdl-select.min.css">
+	</head>
+	<body>
+	</head>
+		<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+			<header class="mdl-layout__header">
+				<div class="mdl-layout__header-row">
+					<span class="mdl-layout-title">Problemă</span>
+					<div class="mdl-layout-spacer"></div>
+				</div>
+			</header>
+			<div class="mdl-layout__drawer">
+				<span class="mdl-layout-title">Opţiuni</span>
+				<nav class="mdl-navigation">
+					<a class="mdl-navigation__link" href="/">
+						<div class="material-icons mdl-badge mdl-badge--overlap">dashboard</div>
+						Pagina principală
+					</a>
+					<a class="mdl-navigation__link" href="/lectii">
+						<div class="material-icons mdl-badge mdl-badge--overlap">book</div>
+						Lecţii
+					</a>
+					<a class="mdl-navigation__link" href="/probleme">
+						<div class="material-icons mdl-badge mdl-badge--overlap">library_books</div>
+						Probleme
+					</a>
+					<a class="mdl-navigation__link" href="/workspace">
+						<div class="material-icons mdl-badge mdl-badge--overlap">code</div>
+						Workspace
+					</a>
+				</nav>
+			</div>
+			<main class="mdl-layout__content">
+			<div style="padding: 10px">
+				<h4><%=data.name%></h4>
+				<%-data.text%>
+			</div>
+			</main>
+		</div>
+
+		<script src="/mdl/material.min.js"></script>
+		<script src="/js/js.cookie.js"></script>
+		<script src="/js/jquery.min.js"></script>
+		<script src="/js/pell.min.js"></script>
+		<script src="/js/getmdl-select.js"></script>
+		<script src="/js/adauga_lectie.js"></script>
+	</body>
+</html>
+

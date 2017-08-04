@@ -57,36 +57,18 @@
 					</div>
 					<div class="mdl-card__supporting-text">
 						<ul class="mdl-list">
+							<% problems.forEach(function(problem) { %>
 							<li class="mdl-list__item">
 								<span class="mdl-list__item-primary-content">
-									<a href="#">Adunare</a>
+									<a href="/problema/<%=problem.id%>"><%=problem.name%></a>
 								</span>
 								<span class="mdl-list__item-secondary-content">
 									<span class="mdl-chip">
-										<span class="mdl-chip__text">Uşor</span>
+										<span class="mdl-chip__text"><%=problem.level%></span>
 									</span>
 								</span>
 							</li>
-							<li class="mdl-list__item">
-								<span class="mdl-list__item-primary-content">
-									<a href="#">Numere pare</a>
-								</span>
-								<span class="mdl-list__item-secondary-content">
-									<span class="mdl-chip">
-										<span class="mdl-chip__text">Uşor</span>
-									</span>
-								</span>
-							</li>
-							<li class="mdl-list__item">
-								<span class="mdl-list__item-primary-content">
-									<a href="#">Suma cifrelor</a>
-								</span>
-								<span class="mdl-list__item-secondary-content">
-									<span class="mdl-chip">
-										<span class="mdl-chip__text">Uşor</span>
-									</span>
-								</span>
-							</li>
+							<% }) %>
 						</ul>
 					</div>
 				</div>

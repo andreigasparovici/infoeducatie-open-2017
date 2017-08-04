@@ -74,9 +74,16 @@ window.onload = function() {
 }
 
 document.getElementById("send").onclick = function() {
+	var level = document.getElementById('sample1').value;
+	var name = document.getElementById("title").value;
+	console.log(editor.content.innerHTML);
 	$.post('/problema/adauga', {
-		tests
+		text: editor.content.innerHTML,
+		level: level,
+		tests: JSON.stringify(tests),
+		name: name
 	}, function(data) {
+		console.log(data)
 		if(data.success)
 			alert('Problem added!');
 	});

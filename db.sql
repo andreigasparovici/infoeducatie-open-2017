@@ -15,6 +15,7 @@ CREATE TABLE `users` (
 CREATE TABLE `problems` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`text` TEXT NOT NULL,
+	`name` varchar(30) NOT NULL,
 	`level` varchar(30) NOT NULL DEFAULT 'usor',
 	PRIMARY KEY (`id`)
 );
