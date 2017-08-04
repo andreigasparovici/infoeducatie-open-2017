@@ -129,8 +129,8 @@ class DbApi {
 		console.log('level', level);
 		return new Promise ((resolve, reject) => {
             this.connection.query(
-				'INSERT INTO problems (name, text, level) VALUES (?, ?, ?)',
-				[name, text, level],
+				'INSERT INTO problems (name, text, level, date_added) VALUES (?, ?, ?, ?)',
+				[name, text, level, (new Date()).toISOString().substring(0, 19).replace('T', ' ')],
 				(err, results, fields) => {
 					resolve(results);
 				});
@@ -148,11 +148,35 @@ class DbApi {
 		});
 	}
 
+	getLatestProblems(limit) {
+		return new Promise((resolve, reject) => {
+			this.connection.query(
+				'SELECT * FROM problems ORDER BY date_added DESC LIMIT ?',
+				[limit],
+				(err, results, fields) => {
+					if(err) reject(err);
+					resolve(results);
+				});
+		});
+	}
+
 	getAllProblems() {
 		return new Promise((resolve, reject) => {
 			this.connection.query(
 				'SELECT * FROM problems',
 				[],
+				(err, results, fields) => {
+					resolve(results);
+				});
+		});
+	}
+
+	getProblemsByRegex(regex) {
+		return new Promise((resolve, reject) => {
+			regex = '%' + regex + '%';
+			this.connection.query(
+				'SELECT * FROM problems WHERE text LIKE ?',
+				[regex],
 				(err, results, fields) => {
 					resolve(results);
 				});

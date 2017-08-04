@@ -17,6 +17,7 @@ CREATE TABLE `problems` (
 	`text` TEXT NOT NULL,
 	`name` varchar(30) NOT NULL,
 	`level` varchar(30) NOT NULL DEFAULT 'usor',
+	`date_added` DATETIME,
 	PRIMARY KEY (`id`)
 );
 
