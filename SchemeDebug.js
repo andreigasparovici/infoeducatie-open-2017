@@ -82,7 +82,7 @@ SDebugger.prototype.evaluate = function(arithmetic, st, dr) {
 	if (rest[0] >= '0' && rest[0] <= '9') {
 		return parseInt(rest);
 	}
-	if (this.varValues[rest])
+	if (this.varValues[rest] != undefined)
 		return this.varValues[rest];
 	console.log("ERROR at " + arithmetic);
 	return 10;

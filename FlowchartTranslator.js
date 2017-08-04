@@ -21,7 +21,7 @@ var createCodeDefinion = function(diagramGraph) {
     for (var i = 0; i < diagramGraph.length; i++) {
         for (var j = 0; j < diagramGraph[i].edges.length; j++) {
             var edge = diagramGraph[i].edges[j];
-            if (edge.type == "EMPTY") {
+            if (edge.type == "EMPTY" || edge.type == "JUMP") {
                 code += edge.x + "->" + edge.y + "\n";
             }
             else if (edge.type == "DA") {
