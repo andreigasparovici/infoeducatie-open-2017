@@ -7,6 +7,7 @@ class DbApi {
 	}
 
 	signupUser(email, password, name, isTeacher) {
+		console.log(password);
 		return new Promise((resolve, reject) => {
 			this.connection.query(
 				'SELECT 1 from `users` where `email` = ?',
@@ -17,7 +18,7 @@ class DbApi {
 					}
 					if(!results.length) {
 						this.connection.query(
-							'INSERT INTO `users`(email, password, name, isTeacher) VALUES(?, ?, ?, ?)',
+							'INSERT INTO `users`(email, password, name, is_teacher) VALUES(?, ?, ?, ?)',
 							[email, bcrypt.hashSync(password), name, isTeacher],
 							(err, results, fields) => {
 								if(err) reject(err);
@@ -34,13 +35,16 @@ class DbApi {
 	loginUser(email, password) {
 		return new Promise((resolve, reject) => {
 			this.connection.query(
-				'SELECT name, activated, is_author, id, password FROM `users` WHERE `email` = ?',
+				'SELECT name, is_activated, is_teacher, id, password FROM `users` WHERE `email` = ?',
 				[email],
 				(err, results, fields) => {
+					console.log(JSON.stringify(results[0]));
 					if(err) reject(err);
-					if(!results.length)
+
+					if(!results || !results.length)
 						return reject('No such email!');
-					if(bcrypt.compareSync(password,results[0]['password'])) {
+
+					if(bcrypt.compareSync(password, results[0].password)) {
 						resolve(results[0]);
 					} else {
 						reject('Wrong password');
@@ -72,12 +76,13 @@ class DbApi {
     }
 
     /// userId - is the id of the author of the lesson
-    addLesson(userId, content) {
+    addLesson(userId, title, content) {
         return new Promise ((resolve, reject) => {
             this.connection.query(
-				'INSERT INTO lessons (author, content, date_added) VALUES (?, ?, ?)',
-				[userId, content, (new Date()).toISOString().substring(0, 19).replace('T', ' ')],
+				'INSERT INTO lessons (author, title, content, date_added) VALUES (?, ?, ?, ?)',
+				[userId, title, content, (new Date()).toISOString().substring(0, 19).replace('T', ' ')],
 				(err, results, fields) => {
+					if(err) reject(err);
 					resolve(results);
 				});
         });

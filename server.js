@@ -3,6 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('express-flash');
+const bcrypt = require('bcrypt-nodejs');
 
 const dbConnection = require('./dbapi/connection.js');
 const DbApi = require('./dbapi/api.js');
@@ -10,8 +11,6 @@ const DbApi = require('./dbapi/api.js');
 let dbApi = new DbApi(dbConnection);
 
 const app = express();
-
-require('dotenv').config();
 
 app.use(express.static(path.join(__dirname, 'static')));
 
@@ -32,11 +31,21 @@ function checkAuth(req, res, next) {
 	return req.session.user ? next() : res.redirect('/login');
 }
 
+function checkIfTeacher(req, res, next) {
+	return req.session.user.is_teacher ? next() : res.send('Nu aveţi permisiuni pentru a accesa pagina!');
+}
+
 app.get('/', (req, res) => {
 	if(req.session.user)
-		if(!req.session.user.teacher)
-			res.render("elev/dashboard");
-		else res.render("profesor/dashboard");
+		if(!req.session.user.is_teacher) {
+			res.render("elev/dashboard", {
+				user: req.session.user
+			});
+		} else {
+			res.render("profesor/dashboard", {
+				user: req.session.user
+			});
+		}
 	else {
 		res.render("anonim/dashboard");
 	}
@@ -59,7 +68,7 @@ app.post('/login', (req, res) => {
 
 	dbApi.loginUser(req.body.email, req.body.password)
 		.then((result) => {
-			if(result.is_teacher && !result.activated) {
+			if(result.is_teacher && !result.is_activated) {
 				req.flash('error', 'Contul aşteaptă aprobare de la un moderator');
 				return res.redirect('/login');
 			}
@@ -71,7 +80,7 @@ app.post('/login', (req, res) => {
 			};
 			return res.redirect('/');
 		})
-		.catch(() => {
+		.catch((err) => {
 			req.flash('error', 'Date de autentificare incorecte!');
 			return res.redirect('/login');
 		});
@@ -84,30 +93,69 @@ app.get('/signup', (req, res) => {
 app.post('/signup', (req, res) => {
 	if(!req.body.name) {
 		req.flash('error', 'Nume invalid!');
-		return res.redirect('/login');
+		return res.redirect('/signup');
 	}
 
 	if(!req.body.email) {
 		req.flash('error', 'Email invalid!');
-		return res.redirect('/login');
+		return res.redirect('/signup');
 	}
 
 	if(!req.body.password) {
 		req.flash('error', 'Parolă invalidă');
-		return res.redirect('/login');
+		return res.redirect('/signup');
 	}
 
 	if(req.body.password_confirm != req.body.password) {
 		req.flash('error', 'Parola trebuie confirmată');
-		return res.redirect('/login');
+		return res.redirect('/signup');
 	}
 
-	res.json(req.body);
-	//dbApi.signupUser(req.body.email, bcrypt.hashSync(req.body.password), req.body.name, req.body.is_teacher)
+	dbApi.signupUser(req.body.email,
+		req.body.password,
+		req.body.name,
+		req.body.is_teacher == "on" ? true : false)
+		.then(() => {
+			req.flash('email', req.body.email);
+			return res.redirect('/login');
+		})
+		.catch((err) => {
+			console.log(err);
+			req.flash('error', 'Adresa de e-mail nu este disponibilă!');
+			return res.redirect('/signup');
+		});
+});
+
+app.get('/logout', (req, res) => {
+	req.session.user = undefined;
+	res.redirect('/');
 });
 
 app.get('/lectii', checkAuth, (req, res) => {
 	res.render("elev/lectii");
+});
+
+
+app.get('/lectie/adauga', checkAuth, checkIfTeacher, (req, res) => {
+	res.render("profesor/adauga_lectie");
+});
+
+app.post('/lectie/adauga', checkAuth, checkIfTeacher, (req, res) => {
+	dbApi.addLesson(req.session.user.id, req.body.content, req.body.name)
+		.then(() => {
+			console.log('Success adding lesson');
+			res.json({
+				success: true
+			});
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+	;
+});
+
+app.get('/lectie/:url', checkAuth, (req, res) => {
+
 });
 
 app.get('/workspace', checkAuth, (req, res) => {
