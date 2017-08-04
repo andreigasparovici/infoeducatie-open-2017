@@ -149,7 +149,7 @@ app.get('/lectie/adauga', checkAuth, checkIfTeacher, (req, res) => {
 });
 
 app.post('/lectie/adauga', checkAuth, checkIfTeacher, (req, res) => {
-	dbApi.addLesson(req.session.user.id, req.body.content, req.body.name)
+	dbApi.addLesson(req.session.user.id, req.body.name, req.body.content)
 		.then(() => {
 			console.log('Success adding lesson');
 			res.json({

@@ -4,7 +4,9 @@
 		<meta charset="UTF-8">
 		<title>Adaugă problemă</title>
 		<link rel="stylesheet" href="/mdl/material.min.css">
+		<link rel="stylesheet" href="/css/profesor.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" href="/css/pell.min.css">
 	</head>
 	<body>
 		<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -35,16 +37,46 @@
 					</a>
 				</nav>
 			</div>
+			<dialog class="mdl-dialog">
+				<h4 class="mdl-dialog__title">Add test</h4>
+				<div class="mdl-dialog__content">
+					<p>
+					<div class="mdl-textfield mdl-js-textfield">
+						<textarea class="mdl-textfield__input" id="input"></textarea>
+						<label class="mdl-textfield__label" for="sample1">Input</label>
+					</div>
+					<div class="mdl-textfield mdl-js-textfield">
+						<textarea class="mdl-textfield__input" id="output"></textarea>
+						<label class="mdl-textfield__label" for="sample1">Output</label>
+					</div>
+					</p>
+				</div>
+				<div class="mdl-dialog__actions">
+					<button type="button" class="mdl-button close">Add</button>
+				</div>
+			</dialog>
 			<main class="mdl-layout__content">
-			<div class="page-content">
-
-				<button class="mdl-button mdl-js-button mdl-button--raised">Adaugă test</button>
-			</div>
+			<h4 align="center">Cerinţă</h4>
+			<br>
+			<div id="pell"></div>
+			<center>
+				<button class="mdl-button mdl-js-button mdl-button--raised" id="add_test">Adaugă test</button>
+			</center>
+			<center>
+				<div id="tests"></div>
+			</center>
+			<br>
+			<center>
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+					mdl-button--accent" id="send">Trimite</button>
+			</center>
+			<br>
 			</main>
 		</div>
 
 		<script src="/mdl/material.min.js"></script>
 		<script src="/js/js.cookie.js"></script>
+		<script src="/js/jquery.min.js"></script>
 		<script src="/js/pell.min.js"></script>
 		<script src="/js/adauga_lectie.js"></script>
 	</body>

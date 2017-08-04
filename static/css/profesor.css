@@ -24,3 +24,25 @@ form {
 #action {
 	transform: translateY(-30px);
 }
+
+.test {
+	display: block;
+	padding: 10px;
+}
+
+.test div{
+	display: inline-block !important;
+}
+
+.test textarea {
+	width: 45%;
+	margin: 5px;
+	border-radius: 3px;
+	font-size: 2em;
+}
+
+h5 {
+	padding: 10px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}

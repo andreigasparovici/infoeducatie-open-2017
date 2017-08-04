@@ -32,6 +32,52 @@ var editor = window.pell.init({
 	}
 })
 
-document.getElementById("adauga").onclick = function() {
+var dialog = document.querySelector('dialog');
 
-};
+var tests = [], testCount = 0;
+
+function createTest(input, output) {
+	return [
+		"<h5>",
+		"Test "+(++testCount),
+		"</h5>",
+		"<div class='test'>",
+		"<textarea class=''>",
+		input,
+		"</textarea>",
+		"<textarea class=''>",
+		output,
+		"</textarea>",
+		"</div>"
+	].join("");
+}
+
+function addTest(input, output) {
+	tests.push({
+		input, output
+	});
+	$("#tests").append(createTest(input, output));
+}
+
+if (!dialog.showModal) {
+	dialogPolyfill.registerDialog(dialog);
+}
+
+window.onload = function() {
+	document.getElementById("add_test").onclick = function() {
+		dialog.showModal();
+	}
+	dialog.querySelector('.close').addEventListener('click', function() {
+		dialog.close();
+		addTest(document.getElementById('input').value, document.getElementById('output').value);
+    });
+}
+
+document.getElementById("send").onclick = function() {
+	$.post('/problema/adauga', {
+		tests
+	}, function(data) {
+		if(data.success)
+			alert('Problem added!');
+	});
+}
