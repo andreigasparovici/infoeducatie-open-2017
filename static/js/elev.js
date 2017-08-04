@@ -32,6 +32,7 @@ document.getElementById("generate_schema").onclick = function() {
 };
 
 document.getElementById("debug").onclick = function() {
+	socket.emit("debug", getPhpCode());
 }
 
 document.getElementById("step").onclick = function() {
