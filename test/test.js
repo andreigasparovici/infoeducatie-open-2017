@@ -34,6 +34,24 @@ $y = 2*$x + $y;`;
             chai.expect(rez[rez.length-1].type).to.equal("end");
             chai.expect(rez[2].type).to.equal("inputoutput");
         });
+
+        it('Check read', () => {
+            var text = `$x;
+$y;
+$i;
+$y = floatval(readline('baga'));
+$x = 5;
+$i = $x + $y;
+print($i);
+`;
+            var rez = converter(text);
+            //console.log(flowTranslator(rez)); 
+            //console.log(rez);
+            chai.expect(rez[1].type).to.equal("inputoutput");
+            chai.expect(rez[1].expr).to.equal("citeste y");
+            //chai.expect(rez[rez.length-1].type).to.equal("end");
+            //chai.expect(rez[2].type).to.equal("inputoutput");
+        });
         
         it('Check if', () => {
             var text = `$x;

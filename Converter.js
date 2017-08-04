@@ -142,8 +142,18 @@ var parsePhpCode = function(runOnce) {
         var toR;
         if (!expression.includes('='))
             return parsePhpCode();
-        else
-            toR = addBlock(expression, "operation"); 
+        else if (!expression.includes('readline'))
+            toR = addBlock(expression, "operation");
+        else {
+            var varName = "", pos = 0;
+            for (pos; pos < expression.length; pos++)
+                if (expression[pos] == '=')
+                    break;
+                else
+                    varName += expression[pos];
+            varName = eliminateHolders(varName).trim();
+            toR = addBlock("citeste " + varName, "inputoutput");
+        } 
         if (!runOnce)
             addEdge(toR, parsePhpCode(), "EMPTY");
         return toR;
