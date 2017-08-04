@@ -38,15 +38,19 @@ document.getElementById("step").onclick = function() {
 	socket.emit("step");
 	console.log("step");
 }
+try{
+	document.getElementById("submit").onclick = function() {
+		$.post('/submit', {
+			code: getPhpCode(),
+			id: problem_id
+		}, function(data) {
+			alert('Ai obţinut ' + data.passed +' puncte din ' +data.total);
+		});
+	};
+}catch(e) {
+	console.log('Mi se fâlfâie');
+}
 
-document.getElementById("submit").onclick = function() {
-	$.post('/submit', {
-		code: getPhpCode(),
-		id: problem_id
-	}, function(data) {
-		alert('Ai obţinut ' + data.passed +' puncte din ' +data.total);
-	});
-};
 var currentHighlight = null;
 socket.on("highlight", function(id) {
 	changeHighlight(id);
