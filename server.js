@@ -15,9 +15,12 @@ const Converter = require('./Converter.js');
 let dbApi = new DbApi(dbConnection);
 
 const app = express();
-let SchemeDebug = require('../SchemeDebug.js');
+let SchemeDebug = require('./SchemeDebug.js');
+
 let http_server = http.Server(app);
+
 let io = socketio(http_server);
+
 let debuggerInstances = null;
 
 app.use(express.static(path.join(__dirname, 'static')));
@@ -257,6 +260,6 @@ app.get('/profesor/lectii', (req, res) => {
 });
 */
 
-app.listen(3000, () => {
+http_server.listen(3000, () => {
 	console.log('Server started on port 3000');
 });
