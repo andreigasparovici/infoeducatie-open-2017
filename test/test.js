@@ -245,5 +245,27 @@ while ($x <= 10) {
             chai.expect(arr[0]).to.equal("altceva");
             chai.expect(arr[5]).to.equal("ok");
         });
+
+
+        it ("Check debug 4 (for -> for)", () => {
+            var text = `$x;
+$i;
+$x = 3;
+for ($i = 1; $i <= 10; $i = $i + 1) {
+  for ($j = 1; $j <= 10; $j = $j + 1) {
+      $x = $x + 1;
+  }
+  print($x);
+}`;
+            var rez = converter(text), arr = [];
+            //console.log(flowTranslator(rez));   
+            var debug = new SchemeDebug(rez, (data) => {
+                 arr.push(data);
+            });
+            while (debug.currentBlock) {
+                debug.next();
+            }
+            chai.expect(arr).to.deep.equal([ 13, 23, 33, 43, 53, 63, 73, 83, 93, 103 ]);
+        });
     });
 });
