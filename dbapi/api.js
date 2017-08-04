@@ -123,6 +123,68 @@ class DbApi {
 				});
 		});
 	}
+
+	addProblem(text, level) {
+		return new Promise ((resolve, reject) => {
+            this.connection.query(
+				'INSERT INTO problems (text, level) VALUES (?, ?)',
+				[text, level],
+				(err, results, fields) => {
+					resolve(results);
+				});
+        });
+	}
+
+	/**
+	 * Adds multiple test to some problem
+	 * @param {number} problemId
+	 * @param {Object[]} tests - The tests to be added.
+	 * @param {string} tests[].input - The line of the test
+	 * @param {string} tests[].ouput - The expected output of the test
+	 */
+	addTests(problemId, tests) {
+		return new Promise((resolve, reject) => {
+			var values = [];
+			for (var i = 0; i < tests.length; i++) {
+				var value = [problemId, tests[i].input, tests[i].ouput];
+				values.push(value);
+			}
+			this.connection.query(
+				"INSERT INTO tests (problem_id, input, output) VALUES ?",
+				[values],
+				(err, results, fields) => {
+					if (err) reject(err);
+					resolve(results);
+				}
+			);
+		});	
+	}
+
+	getAllTestFromProblem(problemId) {
+		return new Promise((resolve, reject) => {
+			this.connection.query(
+				"SELECT id, input, output FROM tests WHERE problem_id = ?",
+				[problemId],
+				(err, results, fields) => {
+					if (err) reject(err);
+					resolve(results);
+				}
+			);
+		});	
+	}
+
+	checkCorrectAnswers(problemId, answers) {
+		return new Promise((resolve, reject) => {
+			var response = [];
+			this.getAllTestFromProblem(problemId).then((data) => {
+				for (var i = 0; i < data.length; i++) {
+					if (answers[data[i].id].output.trim() == data[i].output.trim())
+						response.push({id: data[i].id, correct:true});
+				}
+				resolve(response);
+			});
+		});	
+	}
 }
 
 module.exports = DbApi;
