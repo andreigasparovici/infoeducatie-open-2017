@@ -5,10 +5,12 @@
 		<title>Adaugă problemă</title>
 		<link rel="stylesheet" href="/mdl/material.min.css">
 		<link rel="stylesheet" href="/css/profesor.css">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		<link rel="stylesheet" href="/css/pell.min.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" href="/css/getmdl-select.min.css">
 	</head>
 	<body>
+	</head>
 		<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 			<header class="mdl-layout__header">
 				<div class="mdl-layout__header-row">
@@ -56,7 +58,12 @@
 				</div>
 			</dialog>
 			<main class="mdl-layout__content">
-			<h4 align="center">Cerinţă</h4>
+				<center>
+					<div class="mdl-textfield mdl-js-textfield">
+						<input type="text" class="mdl-textfield__input" id="title">
+						<label class="mdl-textfield__label" for="sample1">Numele problemei</label>
+					</div>
+				</center>
 			<br>
 			<div id="pell"></div>
 			<center>
@@ -66,6 +73,19 @@
 				<div id="tests"></div>
 			</center>
 			<br>
+			<center>
+				<div class="mdl-textfield
+					mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
+					<input class="mdl-textfield__input" type="text" id="sample1" tabIndex="-1" name="level" value="Uşor">
+					<label for="sample1" class="mdl-textfield__label">Nivel de dificultate</label>
+					<ul for="sample1" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+						<li class="mdl-menu__item">Uşor</li>
+						<li class="mdl-menu__item">Mediu</li>
+						<li class="mdl-menu__item">Greu</li>
+					</ul>
+				</div>
+			</center>
+
 			<center>
 				<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
 					mdl-button--accent" id="send">Trimite</button>
@@ -78,6 +98,7 @@
 		<script src="/js/js.cookie.js"></script>
 		<script src="/js/jquery.min.js"></script>
 		<script src="/js/pell.min.js"></script>
+		<script src="/js/getmdl-select.js"></script>
 		<script src="/js/adauga_lectie.js"></script>
 	</body>
 </html>

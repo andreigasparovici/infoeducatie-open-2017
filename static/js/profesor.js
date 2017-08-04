@@ -39,7 +39,7 @@ document.getElementById("adauga").onclick = function() {
 		name: document.getElementById("titlu").value
 	}, function(data) {
 		if(data.success) {
-			alert('Lecţia a fost adăugată cu succes!');
+			alert('Lectia a fost adăugată cu succes!');
 		}
 	});
 };

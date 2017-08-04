@@ -202,12 +202,40 @@ app.get('/problema/adauga', checkAuth, checkIfTeacher, (req, res) => {
 	res.render("profesor/adauga_problema");
 });
 
+app.post('/problema/adauga', (req, res) => {
+	dbApi.addProblem(req.body.name, req.body.text, req.body.level)
+		.then((data) => {
+			console.log(data);
+			let problemId = data.insertId;
+			dbApi.addTests(problemId, JSON.parse(req.body.tests))
+				.then(data => {
+					res.json({success: true});
+				});
+		});
+});
+
+app.get('/problema/:id', (req, res) => {
+	dbApi.getProblemById(req.params.id)
+		.then(data => {
+			if(!data || !data.length)
+				return res.send("Problemă negăsită!");
+			res.render("problema", {
+				data: data[0]
+			});
+		});
+});
+
 app.get('/workspace', checkAuth, (req, res) => {
 	res.render("elev/workspace");
 });
 
 app.get('/probleme', checkAuth, (req, res) => {
-	res.render("elev/probleme");
+	dbApi.getAllProblems()
+		.then(problems => {
+			res.render("elev/probleme", {
+				problems
+			});
+		});
 });
 
 

@@ -124,15 +124,39 @@ class DbApi {
 		});
 	}
 
-	addProblem(text, level) {
+	addProblem(name, text, level) {
+		console.log('text',text);
+		console.log('level', level);
 		return new Promise ((resolve, reject) => {
             this.connection.query(
-				'INSERT INTO problems (text, level) VALUES (?, ?)',
-				[text, level],
+				'INSERT INTO problems (name, text, level) VALUES (?, ?, ?)',
+				[name, text, level],
 				(err, results, fields) => {
 					resolve(results);
 				});
         });
+	}
+
+	getProblemById(id) {
+		return new Promise((resolve, reject) => {
+			this.connection.query(
+				'SELECT * FROM problems WHERE id = ?',
+				[id],
+				(err, results, fields) => {
+					resolve(results);
+				});
+		});
+	}
+
+	getAllProblems() {
+		return new Promise((resolve, reject) => {
+			this.connection.query(
+				'SELECT * FROM problems',
+				[],
+				(err, results, fields) => {
+					resolve(results);
+				});
+		});
 	}
 
 	/**
@@ -140,13 +164,13 @@ class DbApi {
 	 * @param {number} problemId
 	 * @param {Object[]} tests - The tests to be added.
 	 * @param {string} tests[].input - The line of the test
-	 * @param {string} tests[].ouput - The expected output of the test
+	 * @param {string} tests[].output - The expected output of the test
 	 */
 	addTests(problemId, tests) {
 		return new Promise((resolve, reject) => {
 			var values = [];
 			for (var i = 0; i < tests.length; i++) {
-				var value = [problemId, tests[i].input, tests[i].ouput];
+				var value = [problemId, tests[i].input, tests[i].output];
 				values.push(value);
 			}
 			this.connection.query(
@@ -157,7 +181,7 @@ class DbApi {
 					resolve(results);
 				}
 			);
-		});	
+		});
 	}
 
 	getAllTestFromProblem(problemId) {
@@ -170,7 +194,7 @@ class DbApi {
 					resolve(results);
 				}
 			);
-		});	
+		});
 	}
 
 	checkCorrectAnswers(problemId, answers) {
@@ -183,7 +207,7 @@ class DbApi {
 				}
 				resolve(response);
 			});
-		});	
+		});
 	}
 }
 
