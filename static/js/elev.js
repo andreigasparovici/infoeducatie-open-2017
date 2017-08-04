@@ -36,5 +36,6 @@ document.getElementById("debug").onclick = function() {
 }
 
 document.getElementById("step").onclick = function() {
+	socket.emit()
 	console.log("step");
 }
