@@ -65,3 +65,13 @@ var changeHighlight = function(id) {
 	$("#" + id).attr('fill', "#ff0000");
 	currentHighlight = id;
 }
+
+try {
+	document.getElementById("save").onclick = function() {
+		$.post('/save', {
+			xml: getXml(workspace)
+		}, function(data) {
+			alert('Code saved to '+data);
+		});
+	}
+}catch(e) { }

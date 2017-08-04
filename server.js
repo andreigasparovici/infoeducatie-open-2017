@@ -272,6 +272,13 @@ app.get('/workspace', checkAuth, (req, res) => {
 	res.render("elev/workspace");
 });
 
+app.get('/workspace/:id', checkAuth, (req, res) => {
+	dbApi.getCodeById(req.params.id)
+		.then(data => {
+		res.render("elev/workspace", { data });
+	});
+});
+
 app.get('/probleme', checkAuth, (req, res) => {
 	dbApi.getAllProblems()
 		.then(problems => {
@@ -288,6 +295,15 @@ app.post('/schema', (req, res) => {
 	let code = req.body.code;
 	let sol = FlowchartTranslator(Converter(code));
 	res.json({ source:  sol});
+});
+
+app.post('/save', (req, res) => {
+	dbApi.addCode(req.body.xml)
+		.then(result => {
+			res.json({
+				'url' : '/workspace/'+result.insertId
+			});
+		});
 });
 
 /*
