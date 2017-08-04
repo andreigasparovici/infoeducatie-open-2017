@@ -19,6 +19,7 @@
     "express-flash": "0.0.2",
     "express-session": "^1.15.5",
     "mysql": "^2.14.1",
+    "socket.io": "^2.0.3",
     "xss": "^0.3.3"
   },
   "devDependencies": {
