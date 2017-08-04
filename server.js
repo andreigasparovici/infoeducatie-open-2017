@@ -76,16 +76,29 @@ function checkIfTeacher(req, res, next) {
 app.get('/', (req, res) => {
 	if(req.session.user)
 		if(!req.session.user.is_teacher) {
-			dbApi.getLatestLessons(1).then(data => {
-				res.render("elev/dashboard", {
-					user: req.session.user,
-					lessons: data
-				});
-			});
+			dbApi.getLatestLessons(3)
+				.then(lessons => {
+					dbApi.getLatestProblems(3)
+						.then(problems => {
+							res.render("elev/dashboard", {
+								user: req.session.user,
+								lessons,
+								problems
+							});
+						});
+					});
 		} else {
-			res.render("profesor/dashboard", {
-				user: req.session.user
-			});
+			dbApi.getLatestLessons(3)
+				.then(lessons => {
+					dbApi.getLatestProblems(3)
+						.then(problems => {
+							res.render("profesor/dashboard", {
+								user: req.session.user,
+								lessons,
+								problems
+							});
+						});
+				});
 		}
 	else {
 		res.render("anonim/dashboard");
@@ -314,15 +327,6 @@ app.post('/save', (req, res) => {
 		});
 });
 
-/*
-app.get('/profesor', (req, res) => {
-	res.sendFile(path.join(__dirname, 'app', 'profesor.html'));
-});
-
-app.get('/profesor/lectii', (req, res) => {
-
-});
-*/
 
 http_server.listen(3000, () => {
 	console.log('Server started on port 3000');

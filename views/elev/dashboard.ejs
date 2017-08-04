@@ -23,7 +23,7 @@
 					<span class="mdl-layout-title">Pagina principală</span>
 					<div class="mdl-layout-spacer"></div>
 					<nav class="mdl-navigation mdl-layout--large-screen-only">
-						<a class="mdl-navigation__link" href=""><b>Gigi Popescu</b></a>
+						<a class="mdl-navigation__link" href=""><b><%=user.name%></b></a>
 					</nav>
 				</div>
 			</header>
@@ -54,7 +54,7 @@
 			</div>
 			<main class="mdl-layout__content">
 			<div class="page-content">
-				<h3>Bine ai venit, Gigi!</h3>
+				<h3>Bine ai venit, <%=user.name%>!</h3>
 				<br>
 				<div class="mdl-card mdl-shadow--3dp">
 					<div class="mdl-card__title">
@@ -62,36 +62,18 @@
 					</div>
 					<div class="mdl-card__supporting-text">
 						<ul class="mdl-list">
+							<% problems.forEach(function(problem) { %>
 							<li class="mdl-list__item">
 								<span class="mdl-list__item-primary-content">
-									<a href="#">Adunare</a>
+									<a href="/problema/<%=problem.id%>"><%=problem.name%></a>
 								</span>
 								<span class="mdl-list__item-secondary-content">
 									<span class="mdl-chip">
-										<span class="mdl-chip__text">Uşor</span>
+										<span class="mdl-chip__text"><%=problem.level%></span>
 									</span>
 								</span>
 							</li>
-							<li class="mdl-list__item">
-								<span class="mdl-list__item-primary-content">
-									<a href="#">Numere pare</a>
-								</span>
-								<span class="mdl-list__item-secondary-content">
-									<span class="mdl-chip">
-										<span class="mdl-chip__text">Uşor</span>
-									</span>
-								</span>
-							</li>
-							<li class="mdl-list__item">
-								<span class="mdl-list__item-primary-content">
-									<a href="#">Suma cifrelor</a>
-								</span>
-								<span class="mdl-list__item-secondary-content">
-									<span class="mdl-chip">
-										<span class="mdl-chip__text">Uşor</span>
-									</span>
-								</span>
-							</li>
+							<% }) %>
 						</ul>
 					</div>
 				</div>
