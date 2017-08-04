@@ -1,6 +1,8 @@
 const express = require('express');
+const http = require('http');
 const path = require('path');
 const bodyParser = require('body-parser');
+const socketio = require('socket.io');
 const session = require('express-session');
 const flash = require('express-flash');
 const bcrypt = require('bcrypt-nodejs');
@@ -11,6 +13,8 @@ const DbApi = require('./dbapi/api.js');
 let dbApi = new DbApi(dbConnection);
 
 const app = express();
+let http_server = http.Server(app);
+let io = socketio(http_server);
 
 app.use(express.static(path.join(__dirname, 'static')));
 
@@ -26,6 +30,10 @@ app.use(session({
 }));
 
 app.set('view engine', 'ejs');
+
+io.on('connection', (socket) => {
+	console.log('A user connected with id ',socket.id);
+});
 
 function checkAuth(req, res, next) {
 	return req.session.user ? next() : res.redirect('/login');

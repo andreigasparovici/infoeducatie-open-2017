@@ -30,3 +30,11 @@ document.getElementById("generate_schema").onclick = function() {
 		diagram.drawSVG('diagram');
 	});
 };
+
+document.getElementById("debug").onclick = function() {
+	
+}
+
+document.getElementById("step").onclick = function() {
+	console.log("step");
+}
