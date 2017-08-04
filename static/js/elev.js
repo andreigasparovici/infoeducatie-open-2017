@@ -32,10 +32,24 @@ document.getElementById("generate_schema").onclick = function() {
 };
 
 document.getElementById("debug").onclick = function() {
-	
+	console.log("debug");
+	socket.emit("debug", getPhpCode());
 }
 
 document.getElementById("step").onclick = function() {
-	socket.emit()
+	socket.emit("step");
 	console.log("step");
+}
+var currentHighlight = null;
+socket.on("highlight", function(id) {
+	changeHighlight(id);
+});
+
+var changeHighlight = function(id) {
+	console.log(id);
+	if (currentHighlight != null) {
+		$("#" + currentHighlight).attr('fill', "#ffffff");
+	}
+	$("#" + id).attr('fill', "#ff0000");
+	currentHighlight = id;
 }
