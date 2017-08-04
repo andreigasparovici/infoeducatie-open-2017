@@ -38,8 +38,11 @@ function checkIfTeacher(req, res, next) {
 app.get('/', (req, res) => {
 	if(req.session.user)
 		if(!req.session.user.is_teacher) {
-			res.render("elev/dashboard", {
-				user: req.session.user
+			dbApi.getLatestLessons(1).then(data => {
+				res.render("elev/dashboard", {
+					user: req.session.user,
+					lessons: data
+				});
 			});
 		} else {
 			res.render("profesor/dashboard", {
@@ -132,7 +135,12 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/lectii', checkAuth, (req, res) => {
-	res.render("elev/lectii");
+	dbApi.getAllLessons()
+		.then(lessons => {
+			res.render("elev/lectii", {
+				lessons
+			});
+		});
 });
 
 
@@ -154,8 +162,20 @@ app.post('/lectie/adauga', checkAuth, checkIfTeacher, (req, res) => {
 	;
 });
 
-app.get('/lectie/:url', checkAuth, (req, res) => {
+app.get('/lectie/:id', checkAuth, (req, res) => {
+	dbApi.getLessonById(req.params.id)
+		.then(lessons => {
+			if(!lessons.length)
+				return res.send("Lecţie negăsită");
+			res.render("elev/lectie", {
+				user: req.session.user,
+				lesson: lessons[0]
+			});
+		});
+});
 
+app.get('/problema/adauga', checkAuth, checkIfTeacher, (req, res) => {
+	res.render("profesor/adauga_problema");
 });
 
 app.get('/workspace', checkAuth, (req, res) => {

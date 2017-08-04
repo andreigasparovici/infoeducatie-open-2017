@@ -37,6 +37,10 @@
 						<div class="material-icons mdl-badge mdl-badge--overlap">code</div>
 						Workspace
 					</a>
+					<a class="mdl-navigation__link" href="/logout">
+						<div class="material-icons mdl-badge mdl-badge--overlap">exit_to_app</div>
+						Deconectare
+					</a>
 				</nav>
 			</div>
 			<main class="mdl-layout__content">
@@ -88,18 +92,19 @@
 						<h4 class="mdl-card__title-text">Ultimele lecţii adăugate:</h4>
 					</div>
 					<div class="mdl-card__supporting-text">
+						<% if (!lessons.length) { %>
+							<div>Nu există</div>
+						<% } else { %>
 						<ul class="mdl-list">
+							<% lessons.forEach(function(lesson) { %>
 							<li class="mdl-list__item">
 								<span class="mdl-list__item-primary-content">
-									<a href="#">Operaţii aritmetice</a>
+									<a href="/lectie/<%=lesson.id%>"><%=lesson.title%></a>
 								</span>
 							</li>
-							<li class="mdl-list__item">
-								<span class="mdl-list__item-primary-content">
-									<a href="#">Instrucţiunea condiţională</a>
-								</span>
-							</li>
+							<% }) %>
 						</ul>
+						<% } %>
 					</div>
 				</div>
 

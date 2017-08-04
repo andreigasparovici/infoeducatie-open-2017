@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<title>Pagina principală</title>
+		<title><%=lesson.title%></title>
 		<link rel="stylesheet" href="/mdl/material.min.css">
 		<link rel="stylesheet" href="/css/elev/dashboard.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -11,7 +11,7 @@
 		<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 			<header class="mdl-layout__header">
 				<div class="mdl-layout__header-row">
-					<span class="mdl-layout-title">Lecţii</span>
+					<span class="mdl-layout-title"><%=lesson.title%></span>
 					<div class="mdl-layout-spacer"></div>
 					<form action="/lectii/cautare" method="get">
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
@@ -51,27 +51,7 @@
 			</div>
 			<main class="mdl-layout__content">
 			<div class="page-content">
-				<div class="mdl-card mdl-shadow--3dp">
-					<div class="mdl-card__title">
-						<h4 class="mdl-card__title-text">Ultimele lecţii adăugate:</h4>
-					</div>
-					<div class="mdl-card__supporting-text">
-						<% if (!lessons.length) { %>
-							<div>Nu există</div>
-						<% } else { %>
-						<ul class="mdl-list">
-							<% lessons.forEach(function(lesson) { %>
-							<li class="mdl-list__item">
-								<span class="mdl-list__item-primary-content">
-									<a href="/lectie/<%=lesson.id%>"><%=lesson.title%></a>
-								</span>
-							</li>
-							<% }) %>
-						</ul>
-						<% } %>
-					</div>
-				</div>
-
+				<%- lesson.content %>
 			</div>
 			</main>
 		</div>
