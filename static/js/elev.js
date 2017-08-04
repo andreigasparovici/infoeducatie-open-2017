@@ -71,7 +71,7 @@ try {
 		$.post('/save', {
 			xml: getXml(workspace)
 		}, function(data) {
-			alert('Code saved to '+data);
+			alert('Code saved to '+data.url);
 		});
 	}
 }catch(e) { }
