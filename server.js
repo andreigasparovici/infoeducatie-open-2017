@@ -10,11 +10,15 @@ const bcrypt = require('bcrypt-nodejs');
 const dbConnection = require('./dbapi/connection.js');
 const DbApi = require('./dbapi/api.js');
 
+const Converter = require('./Converter.js');
+
 let dbApi = new DbApi(dbConnection);
 
 const app = express();
+let SchemeDebug = require('../SchemeDebug.js');
 let http_server = http.Server(app);
 let io = socketio(http_server);
+let debuggerInstances = null;
 
 app.use(express.static(path.join(__dirname, 'static')));
 
@@ -33,6 +37,18 @@ app.set('view engine', 'ejs');
 
 io.on('connection', (socket) => {
 	console.log('A user connected with id ',socket.id);
+	socket.on("debug", (phpCode) => {
+		var rez = Converter(text);
+		debuggerInstances[socket.id] = new SchemeDebug(rez, (data) => {
+			console.log(socket.id + ": " + data);
+		}); 
+		socket.emit("highlight", debuggerInstances[socket.id].getHighId());
+	});
+
+	socket.on("step", () => {
+		debuggerInstances[socket.id].next();
+		socket.emit("highlight", debuggerInstances[socket.id].getHighId());
+	});
 });
 
 function checkAuth(req, res, next) {
@@ -194,7 +210,7 @@ app.get('/probleme', checkAuth, (req, res) => {
 	res.render("elev/probleme");
 });
 
-const Converter = require('./Converter.js');
+
 const FlowchartTranslator = require('./FlowchartTranslator.js');
 
 app.post('/schema', (req, res) => {
