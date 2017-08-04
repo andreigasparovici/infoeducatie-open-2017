@@ -296,7 +296,7 @@ app.get('/workspace', checkAuth, (req, res) => {
 app.get('/workspace/:id', checkAuth, (req, res) => {
 	dbApi.getCodeById(req.params.id)
 		.then(data => {
-		res.render("elev/workspace", { data });
+		res.render("elev/workspace", { data: data.xml_code });
 	});
 });
 
