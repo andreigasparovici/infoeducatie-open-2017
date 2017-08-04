@@ -32,10 +32,19 @@ document.getElementById("generate_schema").onclick = function() {
 };
 
 document.getElementById("debug").onclick = function() {
-	
+
 }
 
 document.getElementById("step").onclick = function() {
 	socket.emit()
 	console.log("step");
 }
+
+document.getElementById("submit").onclick = function() {
+	$.post('/submit', {
+		code: getPhpCode(),
+		id: problem_id
+	}, function(data) {
+		alert('Ai obţinut ' + data.passed +' puncte din ' +data.total);
+	});
+};

@@ -38,13 +38,16 @@ app.use(session({
 
 app.set('view engine', 'ejs');
 
+const child_process = require('child_process');
+const fs = require('fs');
+
 io.on('connection', (socket) => {
 	console.log('A user connected with id ',socket.id);
 	socket.on("debug", (phpCode) => {
 		var rez = Converter(text);
 		debuggerInstances[socket.id] = new SchemeDebug(rez, (data) => {
 			console.log(socket.id + ": " + data);
-		}); 
+		});
 		socket.emit("highlight", debuggerInstances[socket.id].getHighId());
 	});
 
@@ -224,6 +227,43 @@ app.get('/problema/:id', (req, res) => {
 			res.render("problema", {
 				data: data[0],
 				user: req.session.user
+			});
+		});
+});
+
+app.get('/problema/:id/rezolva', checkAuth, (req, res) => {
+	res.render("elev/rezolva", {
+		problema: req.params.id
+	});
+});
+
+app.post('/submit', checkAuth, (req, res) => {
+	console.log(req.body);
+	var problema = req.body.id;
+	var code = req.body.code;
+
+	fs.writeFileSync(__dirname + '/code.php', "<?php\n"+code+"\n?>");
+
+	var passedTests = 0;
+	var totalTests = 0;
+
+	dbApi.getAllTestFromProblem(problema)
+		.then(data=>{
+			console.log(JSON.stringify(data));
+			data.forEach(function(item) {
+				++totalTests;
+				var result = child_process.execSync("php code.php", {
+					input: item.input.split(' ').join('\n'),
+					timeout: 2000
+				}).toString();
+				console.log(result.toString());
+				if(result == item.output) {
+					++passedTests;
+				}
+			});
+			res.json({
+				passed: passedTests,
+				total: totalTests
 			});
 		});
 });
