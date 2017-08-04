@@ -189,7 +189,6 @@ app.get('/problema/adauga', checkAuth, checkIfTeacher, (req, res) => {
 app.post('/problema/adauga', (req, res) => {
 	dbApi.addProblem(req.body.name, req.body.text, req.body.level)
 		.then((data) => {
-			console.log(data);
 			let problemId = data.insertId;
 			dbApi.addTests(problemId, JSON.parse(req.body.tests))
 				.then(data => {
@@ -204,7 +203,8 @@ app.get('/problema/:id', (req, res) => {
 			if(!data || !data.length)
 				return res.send("Problemă negăsită!");
 			res.render("problema", {
-				data: data[0]
+				data: data[0],
+				user: req.session.user
 			});
 		});
 });
