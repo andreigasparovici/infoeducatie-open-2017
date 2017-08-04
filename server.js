@@ -21,7 +21,7 @@ let http_server = http.Server(app);
 
 let io = socketio(http_server);
 
-let debuggerInstances = null;
+let debuggerInstances = {};
 
 app.use(express.static(path.join(__dirname, 'static')));
 
@@ -44,7 +44,7 @@ const fs = require('fs');
 io.on('connection', (socket) => {
 	console.log('A user connected with id ',socket.id);
 	socket.on("debug", (phpCode) => {
-		var rez = Converter(text);
+		var rez = Converter(phpCode);
 		debuggerInstances[socket.id] = new SchemeDebug(rez, (data) => {
 			console.log(socket.id + ": " + data);
 		});

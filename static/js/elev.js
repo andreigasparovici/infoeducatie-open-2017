@@ -32,11 +32,10 @@ document.getElementById("generate_schema").onclick = function() {
 };
 
 document.getElementById("debug").onclick = function() {
-
 }
 
 document.getElementById("step").onclick = function() {
-	socket.emit()
+	socket.emit("step");
 	console.log("step");
 }
 
@@ -48,3 +47,16 @@ document.getElementById("submit").onclick = function() {
 		alert('Ai obţinut ' + data.passed +' puncte din ' +data.total);
 	});
 };
+var currentHighlight = null;
+socket.on("highlight", function(id) {
+	changeHighlight(id);
+});
+
+var changeHighlight = function(id) {
+	console.log(id);
+	if (currentHighlight != null) {
+		$("#" + currentHighlight).attr('fill', "#ffffff");
+	}
+	$("#" + id).attr('fill', "#ff0000");
+	currentHighlight = id;
+}
