@@ -42,7 +42,8 @@ var addSuccessorEdge = function(a, b, t) {
         var p = a.edges[i].y;
         var zp = getBlockById(p);
         //console.log(p + " " + JSON.stringify(zp));
-        addSuccessorEdge(getBlockById(a.edges[i].y), b, t);
+        if (a.edges[i].type != "JUMP")
+            addSuccessorEdge(getBlockById(a.edges[i].y), b, t);
     }
     if (a.edges.length == 0) //|| (a.edges.length == 1 && a.type == "condition"))
         addEdge(a, b, t);
@@ -181,7 +182,7 @@ var parsePhpCode = function(runOnce) {
         var DA = parsePhpCode();
         addEdge(toR, DA, "DA");
         goPast('}');
-        addSuccessorEdge(DA, toR, "EMPTY");
+        addSuccessorEdge(DA, toR, "JUMP");
         if (!runOnce) {
             var continuation = parsePhpCode();
             addEdge(toR, continuation, "NU");
@@ -235,7 +236,7 @@ var parsePhpCode = function(runOnce) {
         goPast('}');
         var pasOp = addBlock(pas, "operation");
         addSuccessorEdge(DA, pasOp, "EMPTY");
-        addEdge(pasOp, forOp, "EMPTY");
+        addEdge(pasOp, forOp, "JUMP");
         if (!runOnce) {
             var continuation = parsePhpCode();
             addEdge(forOp, continuation, "NU");
